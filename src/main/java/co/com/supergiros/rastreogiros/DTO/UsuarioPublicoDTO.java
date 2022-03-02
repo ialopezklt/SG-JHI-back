@@ -2,7 +2,6 @@ package co.com.supergiros.rastreogiros.DTO;
 
 import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
 import co.com.supergiros.rastreogiros.util.Constantes.TipoUsuario;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.Instant;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

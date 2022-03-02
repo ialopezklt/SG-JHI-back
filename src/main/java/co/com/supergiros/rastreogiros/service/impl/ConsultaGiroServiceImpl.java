@@ -46,6 +46,8 @@ public class ConsultaGiroServiceImpl implements ConsultaGiroService {
         	log.error("PIN no encontrado. Datos de consulta: ID[" + numeroDocumento + "] Tipo[" + tipoDocumento + "] PIN:[" + pin + "]");
         }
         
+        log.error("Resultado consulta pin consulta: ID[" + numeroDocumento + "] Tipo[" + tipoDocumento + "] PIN:[" + pin + "]" 
+        			+ respuesta.getEstado() + " " + respuesta.getMensaje());
         return respuesta;
     }
 
