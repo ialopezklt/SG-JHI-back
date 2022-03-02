@@ -67,6 +67,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioNuevo.setClave(encryptedPassword);
         usuarioNuevo.setFechaCreacion(Instant.now());
         usuarioNuevo = usuarioRepository.save(usuarioNuevo);
+        if (usuarioNuevo == null) {
+        	throw new RuntimeException("No se pudo crear el usuario");
+        }
         Rol rol = rolRepository.findById(3L).get();
         Set<Rol> listaRoles = new HashSet<Rol>();
         listaRoles.add(rol);
@@ -75,6 +78,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             utilidadesService.enviarMensajeRegistroExitoso(usuarioNuevo.getCorreo(), String.valueOf(usuarioNuevo.getCelular()));
         } catch (AddressException e) {
             // TODO Auto-generated catch block
+        	log.error("Mensajes no enviados en creacion de usuario " + usuarioNuevo.getUsername());
             e.printStackTrace();
         }
         

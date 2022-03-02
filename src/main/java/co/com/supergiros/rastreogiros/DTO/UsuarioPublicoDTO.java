@@ -15,7 +15,6 @@ public class UsuarioPublicoDTO {
 
     private String username;
 
-    @JsonIgnore
     private String clave;
 
     private String correo;
