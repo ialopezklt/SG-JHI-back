@@ -94,6 +94,7 @@ out/
 *.war
 *.ear
 *.db
+!SmsPlayTech-1.1.jar
 
 ######################
 # Windows
