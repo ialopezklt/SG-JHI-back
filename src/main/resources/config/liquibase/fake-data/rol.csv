@@ -1,0 +1,4 @@
+rol_id;nombre;activo
+1;admin;S
+2;Gestor;S
+3;Publico;S

@@ -1,0 +1,7 @@
+grupo_parametro_id;nombre;activo
+1;Generales;S
+2;Conexión DB;S
+3;SERVICIOS CORE – CONSULTA GIROS;S
+4;DATOS CONEXIÓN MOTOR SMS;S
+5;Conexión Email;S
+6;Mensajes;S

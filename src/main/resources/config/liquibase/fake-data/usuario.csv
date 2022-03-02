@@ -1,0 +1,2 @@
+usuario_id;tipo_usuario;username;clave;activo;correo;celular;tipo_documento;numero_documento;primer_nombre;segundo_nombre;primer_apellido;segundo_apellido;ultimo_ingreso;inicio_inactivacion;fin_inactivacion;fecha_creacion;creado_por
+1;Interno;superadmin;na;true;ivanalexislopezc@gmail.com;3126600056;CC;94390890;Ivan;Alexis;Lopez;Castrillon;2022-02-03T13:31:08;;;2022-02-03T10:39:14;self
