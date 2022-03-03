@@ -39,6 +39,8 @@ import org.springframework.stereotype.Service;
 @Service("utilidadesServiceImpl")
 public class UtilidadesServiceImpl implements UtilidadesService {
 
+	private static final Logger log = LoggerFactory.getLogger(UtilidadesServiceImpl.class);
+	
     @Autowired
     @Qualifier("parametroServiceImpl")
     ParametroService parametroService;
@@ -111,7 +113,7 @@ public class UtilidadesServiceImpl implements UtilidadesService {
             transport = session.getTransport(emailProtocol);
 
             if (transport == null) {
-                System.out.println("No se pudo enviar el correo, configuracion de correo erronea: ");
+            	log.error("No se pudo enviar el correo, configuracion de correo erronea: ");
             } else {
                 thread(transport, msg);
             }
@@ -177,6 +179,7 @@ public class UtilidadesServiceImpl implements UtilidadesService {
             );
             
             response = new JSONObject(result);
+            
             System.out.println(response);
             Estado = response.getBoolean("status");
 
@@ -237,14 +240,14 @@ public class UtilidadesServiceImpl implements UtilidadesService {
 
         respuestaCodigos.setCodigoEmail(numeroEmail);
 
-        String mensaje = parametroService.findById(26L).getValor();
-        String baseImagenes = parametroService.findById(36L).getValor();
+        String mensaje = parametroService.findById(Constantes.ID_PAR_EMAIL_PREREGISTRO).getValor();
+        String baseImagenes = parametroService.findById(Constantes.ID_PAR_BASE_IMAGENES).getValor();
 
         mensaje = mensaje.replace("<--CODIGO-->", numeroEmail).replace("<--BASE-IMG-->", baseImagenes);
         StringWriter mensajeCorreo = new StringWriter();
         mensajeCorreo.write(mensaje);
 
-        String asuntoEmail = parametroService.findById(25L).getValor();
+        String asuntoEmail = parametroService.findById(Constantes.ID_PAR_ASUNTO_EMAIL_PREREGISTRO).getValor();
         enviarEmail(email, asuntoEmail, mensajeCorreo);
 
         // mensaje SMS
@@ -268,15 +271,15 @@ public class UtilidadesServiceImpl implements UtilidadesService {
     @Override
     @Async
     public void enviarMensajeRegistroExitoso(String email, String telefono) throws AddressException {
-        String URL_imagenes = parametroService.findById(36L).getValor();
-        String mensaje = parametroService.findById(29L).getValor();
+        String URL_imagenes = parametroService.findById(Constantes.ID_PAR_BASE_IMAGENES).getValor();
+        String mensaje = parametroService.findById(Constantes.ID_PAR_EMAIL_REGISTRO_EXITO).getValor();
 
         mensaje = mensaje.replace("<--BASE-IMG-->", URL_imagenes);
 
         StringWriter mensajeCorreo = new StringWriter();
         mensajeCorreo.write(mensaje);
 
-        String asuntoEmail = parametroService.findById(28L).getValor();
+        String asuntoEmail = parametroService.findById(Constantes.ID_PAR_ASUNTO_EMAIL_REGISTRO_EXITO).getValor();
         enviarEmail(email, asuntoEmail, mensajeCorreo);
 
         String tipoMensajeProveedor = parametroRepository.findById(Constantes.ID_SMS_PLANTILLA_REGISTRO_EXITO).get().getValor();
@@ -293,15 +296,15 @@ public class UtilidadesServiceImpl implements UtilidadesService {
     @Override
     @Async
     public void enviarMensajeActualizacionExitosa(String email, String telefono) throws AddressException {
-        String URL_imagenes = parametroService.findById(36L).getValor();
-        String mensaje = parametroService.findById(43L).getValor(); // cuerpo mensaje
+        String URL_imagenes = parametroService.findById(Constantes.ID_PAR_BASE_IMAGENES).getValor();
+        String mensaje = parametroService.findById(Constantes.ID_PAR_EMAIL_ACTUALIZ_EXITO).getValor(); // cuerpo mensaje
 
         mensaje = mensaje.replace("<--BASE-IMG-->", URL_imagenes);
 
         StringWriter mensajeCorreo = new StringWriter();
         mensajeCorreo.write(mensaje);
 
-        String asuntoEmail = parametroService.findById(42L).getValor();  // asunto mensaje
+        String asuntoEmail = parametroService.findById(Constantes.ID_PAR_ASUNTO_EMAIL_ACTUALIZ_EXITO).getValor();  // asunto mensaje
         enviarEmail(email, asuntoEmail, mensajeCorreo);
 
         String tipoMensajeProveedor = parametroRepository.findById(Constantes.ID_SMS_PLANTILLA_ACTU_EXITO).get().getValor();
@@ -317,7 +320,7 @@ public class UtilidadesServiceImpl implements UtilidadesService {
     public CodigosMensaje enviarMensajeRecuperarContrasena(String email, String telefono) throws AddressException {
         CodigosMensaje respuestaCodigos = new CodigosMensaje();
 
-        String URL_imagenes = parametroService.findById(36L).getValor();
+        String URL_imagenes = parametroService.findById(Constantes.ID_PAR_BASE_IMAGENES).getValor();
 
         String numeroEmail = "";
         Random rand = new Random();
@@ -327,13 +330,13 @@ public class UtilidadesServiceImpl implements UtilidadesService {
         numeroEmail += String.valueOf(rand.nextInt(10));
         respuestaCodigos.setCodigoEmail(numeroEmail);
 
-        String mensaje = parametroService.findById(32L).getValor();
+        String mensaje = parametroService.findById(Constantes.ID_PAR_EMAIL_RECUPE_CONTRA).getValor();
         mensaje = mensaje.replace("<--BASE-IMG-->", URL_imagenes).replace("<--CODIGO-->", numeroEmail);
 
         StringWriter mensajeCorreo = new StringWriter();
         mensajeCorreo.write(mensaje);
 
-        String asuntoEmail = parametroService.findById(31L).getValor();
+        String asuntoEmail = parametroService.findById(Constantes.ID_PAR_ASUNTO_RECUPE_CONTRA).getValor();
         enviarEmail(email, asuntoEmail, mensajeCorreo);
 
         // mensaje SMS

@@ -143,7 +143,6 @@ public class PublicSecurityController {
         // Verificar si existe por email y por telefono
         String emaulUsuarioNuevo = usuarioPublicoDTO.getCorreo();
         Usuario usuarioExiste = usuarioService.findByCorreo(emaulUsuarioNuevo);
-        System.out.println("\n*********************************\n************************clave recibida: " + usuarioPublicoDTO.getClave());
         try {
             if (usuarioExiste != null) {
                 throw new UsuarioExisteException("Ya existe un usuario registrado con el correo " + emaulUsuarioNuevo);

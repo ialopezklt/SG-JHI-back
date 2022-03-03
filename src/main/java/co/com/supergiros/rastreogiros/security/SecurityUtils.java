@@ -28,8 +28,7 @@ public final class SecurityUtils {
     }
 
     private static String extractPrincipal(Authentication authentication) {
-    	System.out.println("\n*************************\nEntro a extractPrincipal");
-        if (authentication == null) {
+    	if (authentication == null) {
             return null;
         } else if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
@@ -49,8 +48,7 @@ public final class SecurityUtils {
      * @return the JWT of the current user.
      */
     public static Optional<String> getCurrentUserJWT() {
-    	System.out.println("\n************************\nEntro a getCurrentUserJWT");
-        SecurityContext securityContext = SecurityContextHolder.getContext();
+    	SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional
             .ofNullable(securityContext.getAuthentication())
             .filter(authentication -> authentication.getCredentials() instanceof String)

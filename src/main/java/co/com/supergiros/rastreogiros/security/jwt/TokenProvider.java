@@ -40,8 +40,7 @@ public class TokenProvider {
     private final SecurityMetersService securityMetersService;
 
     public TokenProvider(JHipsterProperties jHipsterProperties, SecurityMetersService securityMetersService) {
-    	System.out.println("\n**************************\nEntro a TokenProvider");
-        byte[] keyBytes;
+    	byte[] keyBytes;
         String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
         if (!ObjectUtils.isEmpty(secret)) {
             log.debug("Using a Base64-encoded JWT secret key");
@@ -64,8 +63,7 @@ public class TokenProvider {
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
-    	System.out.println("\n***********************\nEntro a createToken");
-        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+    	String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
         Date validity;
@@ -85,8 +83,7 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-    	System.out.println("entro a getAuthentication");
-        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+    	Claims claims = jwtParser.parseClaimsJws(token).getBody();
 
         Collection<? extends GrantedAuthority> authorities = Arrays
             .stream(claims.get(AUTHORITIES_KEY).toString().split(","))

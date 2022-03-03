@@ -73,7 +73,7 @@ public class LdapSGAuthenticationProvider implements AuthenticationProvider {
        	contextSource.setUrl(parametroService.findById(Constantes.ID_PAR_URL_LDAP).getValor());
         // contextSource.setUrl("ldap://10.244.10.6:389");
         // contextSource.setBase(parametroService.findById(Constantes.ID_PAR_BASE_LDAP).getValor());
-        contextSource.setUserDn("CN={0}," + parametroService.findById(Constantes.ID_PAR_BASE_LDAP).getValor());
+        // contextSource.setUserDn("CN={0}," + parametroService.findById(Constantes.ID_PAR_BASE_LDAP).getValor());
         contextSource.setAnonymousReadOnly(true);
         contextSource.setBase("DC=supergiros,DC=super");
         // contextSource.setUserDn("CN=rgsgt,OU=4.Usuarios_Servicios,DC=supergiros,DC=super");

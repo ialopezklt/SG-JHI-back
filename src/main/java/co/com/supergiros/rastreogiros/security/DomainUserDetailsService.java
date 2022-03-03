@@ -32,7 +32,6 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
-        System.out.println("\n*****************************\nEntro a autenticar");
         String lowercaseLogin = login; // login.toLowerCase();
         Optional<Usuario> userFromDatabase = userRepository.findByUsername(lowercaseLogin);
         
