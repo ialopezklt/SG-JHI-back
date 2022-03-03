@@ -119,6 +119,10 @@ public class Constantes {
     public static final Long ID_SMS_TIMEOUT_EXTERNO = 22L;
     public static final Long ID_SMS_USUARIO_SMS = 23L;
     public static final Long ID_SMS_PASSWORD_SMS = 24L;
+    
+    // constantes LDAP
+    public static final Long ID_PAR_URL_LDAP = 45L;
+    public static final Long ID_PAR_DOMAIN_NAME = 46L;
 
     // PARAMETROS_EN_VAULT: LISTA DE ID's SEPARADOS POR COMA, ej 1,2,6,7
     public static final String PARAMETROS_EN_VAULT = "1,2,3,4,5";

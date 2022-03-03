@@ -32,13 +32,14 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
+        System.out.println("\n*****************************\nEntro a autenticar");
         String lowercaseLogin = login; // login.toLowerCase();
         Optional<Usuario> userFromDatabase = userRepository.findByUsername(lowercaseLogin);
         
         return userFromDatabase
             .map(user -> {
                 if (!user.getActivo()) {
-                    throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+                    throw new UserNotActivatedException("El Usuario " + lowercaseLogin + " no esta activo");
                 }
                 List<GrantedAuthority> grantedAuthorities = user
                     .getRoles()

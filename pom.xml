@@ -328,6 +328,7 @@
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
 		<!-- ============================================================================================ -->
+		<!-- =============================== ADICIONADOS POR KALETTRE =================================== -->
 		<!-- ============================================================================================ -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -336,12 +337,12 @@
 			<optional>true</optional>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
-		<dependency>
+		<dependency> <!--  para cifrado. Solicitado por SG  -->
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt</artifactId>
 			<version>1.9.3</version>
 		</dependency>
-		<dependency>
+		<dependency> <!--  Para envio de SMS  -->
 		    <groupId>com.playtechla</groupId>
 		    <artifactId>SmsPlayTech</artifactId>
 		    <scope>system</scope>
@@ -352,6 +353,15 @@
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>
 		    <version>20211205</version>
+		</dependency>
+		<!--  LOS SIGUIENTES 2 PARA AUTENTICACION LDAP -->
+		<dependency>
+		    <groupId>org.springframework.ldap</groupId>
+		    <artifactId>spring-ldap-core</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-ldap</artifactId>
 		</dependency>
 	</dependencies>
 
