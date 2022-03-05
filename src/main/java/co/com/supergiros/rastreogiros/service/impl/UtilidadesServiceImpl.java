@@ -7,6 +7,8 @@ import co.com.supergiros.rastreogiros.service.ParametroService;
 import co.com.supergiros.rastreogiros.service.UtilidadesService;
 import co.com.supergiros.rastreogiros.util.Constantes;
 import com.playtechla.smsinvoker.SMSInvoker;
+
+import java.io.IOException;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,27 +52,15 @@ public class UtilidadesServiceImpl implements UtilidadesService {
 
     private static final Logger logger = LoggerFactory.getLogger(UtilidadesServiceImpl.class);
 
-    private Multipart mp = new MimeMultipart();
-    private MimeBodyPart htmlPart = new MimeBodyPart();
     private Properties props = new Properties();
     private Transport transport;
 
     @Override
     public void enviarEmail(String to, String subject, StringWriter content) throws AddressException {
         Message msg;
+        Multipart mp = new MimeMultipart();
+        MimeBodyPart htmlPart = new MimeBodyPart();
 
-        /* 
-		String host="smtp.office365.com";
-		String puerto="587";
-		String sslEnable="false";
-		String startTtls="true";
-		String realizarAuth="true";
-		String usuario="sistema.auditoria@supergiros.com.co";
-		String clave="Temporal.2020";
-		String fromAddress="sistema.auditoria@supergiros.com.co";
-		String emailProtocol="smtp";
-
-*/
         String host = parametroService.findById(Constantes.ID_EMAIL_SERVER_IP).getValor();
         String puerto = parametroService.findById(Constantes.ID_EMAIL_SERVER_PORT).getValor();
         String sslEnable = parametroService.findById(Constantes.ID_EMAIL_SSL_ENABLE).getValor();
@@ -244,8 +234,18 @@ public class UtilidadesServiceImpl implements UtilidadesService {
         String baseImagenes = parametroService.findById(Constantes.ID_PAR_BASE_IMAGENES).getValor();
 
         mensaje = mensaje.replace("<--CODIGO-->", numeroEmail).replace("<--BASE-IMG-->", baseImagenes);
+        System.out.println("\n************************\n***********************\nLongitud mensaje:" + mensaje.length());
+        
         StringWriter mensajeCorreo = new StringWriter();
+
         mensajeCorreo.write(mensaje);
+        System.out.println("\n************************\n***********************\nLongitud SB:" + mensajeCorreo.toString().length());
+        try {
+			mensajeCorreo.close();
+		} catch (IOException e) {
+			log.debug("Error Cerrando String Buffer");
+			e.printStackTrace();
+		}
 
         String asuntoEmail = parametroService.findById(Constantes.ID_PAR_ASUNTO_EMAIL_PREREGISTRO).getValor();
         enviarEmail(email, asuntoEmail, mensajeCorreo);
@@ -273,11 +273,18 @@ public class UtilidadesServiceImpl implements UtilidadesService {
     public void enviarMensajeRegistroExitoso(String email, String telefono) throws AddressException {
         String URL_imagenes = parametroService.findById(Constantes.ID_PAR_BASE_IMAGENES).getValor();
         String mensaje = parametroService.findById(Constantes.ID_PAR_EMAIL_REGISTRO_EXITO).getValor();
-
+        
         mensaje = mensaje.replace("<--BASE-IMG-->", URL_imagenes);
-
+        
         StringWriter mensajeCorreo = new StringWriter();
         mensajeCorreo.write(mensaje);
+        try {
+			mensajeCorreo.close();
+		} catch (IOException e) {
+			log.debug("Error Cerrando String Buffer");
+			e.printStackTrace();
+		}
+
 
         String asuntoEmail = parametroService.findById(Constantes.ID_PAR_ASUNTO_EMAIL_REGISTRO_EXITO).getValor();
         enviarEmail(email, asuntoEmail, mensajeCorreo);
@@ -303,6 +310,13 @@ public class UtilidadesServiceImpl implements UtilidadesService {
 
         StringWriter mensajeCorreo = new StringWriter();
         mensajeCorreo.write(mensaje);
+        try {
+			mensajeCorreo.close();
+		} catch (IOException e) {
+			log.debug("Error Cerrando String Buffer");
+			e.printStackTrace();
+		}
+
 
         String asuntoEmail = parametroService.findById(Constantes.ID_PAR_ASUNTO_EMAIL_ACTUALIZ_EXITO).getValor();  // asunto mensaje
         enviarEmail(email, asuntoEmail, mensajeCorreo);
@@ -335,6 +349,13 @@ public class UtilidadesServiceImpl implements UtilidadesService {
 
         StringWriter mensajeCorreo = new StringWriter();
         mensajeCorreo.write(mensaje);
+        try {
+			mensajeCorreo.close();
+		} catch (IOException e) {
+			log.debug("Error Cerrando String Buffer");
+			e.printStackTrace();
+		}
+
 
         String asuntoEmail = parametroService.findById(Constantes.ID_PAR_ASUNTO_RECUPE_CONTRA).getValor();
         enviarEmail(email, asuntoEmail, mensajeCorreo);
@@ -364,7 +385,6 @@ public class UtilidadesServiceImpl implements UtilidadesService {
                 try {
                     transport.connect();
                     Transport.send(msg);
-                    System.out.println("Correo Enviado");
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 } finally {

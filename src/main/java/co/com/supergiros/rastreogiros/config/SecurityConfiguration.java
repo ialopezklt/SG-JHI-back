@@ -41,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final SecurityProblemSupport problemSupport;
     private final CorsFilter corsFilter;
     private ParametroService parametroService;
+    private DirectorioActivoUserMapper directorioActivoUserMapper;
 
     public SecurityConfiguration(
         TokenProvider tokenProvider,
@@ -49,13 +50,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         AuthenticationManagerBuilder authenticationManagerBuilder,
         UserDetailsService userDetailsService,
         CorsFilter corsFilter,
-        ParametroService parametroService
+        ParametroService parametroService,
+        DirectorioActivoUserMapper directorioActivoUserMapper
     ) {
         this.tokenProvider = tokenProvider;
         this.problemSupport = problemSupport;
         this.jHipsterProperties = jHipsterProperties;
         this.corsFilter = corsFilter;
         this.parametroService = parametroService;
+        this.directorioActivoUserMapper = directorioActivoUserMapper;
     }
     
     @Override
@@ -65,10 +68,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     
     /* ==========================================================
-     *  AutenticationProvider's a utilizar para la autenticacion
+     *  AutenticationProvider's a utilizar para la autenticacion. Combina todas las opciones de autenticacion
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    	// 1. Autenticacion contra la BD
+    	auth.userDetailsService(domainUserDetailsService);
+    	
+    	// 2. Autenticacion contra el AD
     	String urlAD = parametroService.findById(Constantes.ID_PAR_URL_LDAP).getValor();
     	String domainName = parametroService.findById(Constantes.ID_PAR_DOMAIN_NAME).getValor();
     	ActiveDirectoryLdapAuthenticationProvider adProvider =
@@ -76,10 +83,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     	adProvider.setConvertSubErrorCodesToExceptions(true);
         adProvider.setUseAuthenticationRequestCredentials(true);
+        adProvider.setUserDetailsContextMapper(directorioActivoUserMapper);
         
         auth.authenticationProvider(adProvider);
-    	auth.userDetailsService(domainUserDetailsService);
-    }
+        // ===================================================
+    }  
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -144,4 +152,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
     }
+    
 }
