@@ -5,3 +5,4 @@ grupo_parametro_id;nombre;activo
 4;DATOS CONEXIÓN MOTOR SMS;S
 5;Conexión Email;S
 6;Mensajes;S
+7;LDAP;S

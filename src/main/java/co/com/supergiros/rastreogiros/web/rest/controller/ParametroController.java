@@ -1,6 +1,8 @@
 package co.com.supergiros.rastreogiros.web.rest.controller;
 
+import co.com.supergiros.rastreogiros.entity.GrupoParametros;
 import co.com.supergiros.rastreogiros.entity.Parametro;
+import co.com.supergiros.rastreogiros.repository.GrupoParametroRepository;
 import co.com.supergiros.rastreogiros.repository.ParametroRepository;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -8,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,9 +33,13 @@ public class ParametroController {
     private String applicationName = "GWPrivado->ParametroController";
 
     private final ParametroRepository parametroRepository;
+    
+    private GrupoParametroRepository grupoParametroRepository;
 
-    public ParametroController(ParametroRepository parametroRepository) {
+    public ParametroController(ParametroRepository parametroRepository
+    				, GrupoParametroRepository grupoParametroRepository) {
         this.parametroRepository = parametroRepository;
+        this.grupoParametroRepository = grupoParametroRepository;
     }
 
     /**
@@ -157,9 +164,20 @@ public class ParametroController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of parametros in body.
      */
     @GetMapping("/parametros")
-    public ResponseEntity<List<Parametro>> getAllParametros() {
+    public ResponseEntity<List<Parametro>> getAllParametros(@RequestParam(name = "grupoParametroId", required = false) Optional<Long> grupoParametroId) {
         log.debug("REST request to get all Parametros");
-        return ResponseEntity.ok(parametroRepository.findAll());
+        if (grupoParametroId.isPresent()) {
+        	Optional<GrupoParametros> grupoParametros = grupoParametroRepository.findById(grupoParametroId.get());
+        	if (grupoParametros.isPresent()) {
+        		return ResponseEntity.ok(parametroRepository.findByGrupoParametroWithGrupoParametro(grupoParametros.get()));
+        	} else {
+        		throw new BadRequestAlertException("Grupo parametro no existe", ENTITY_NAME, "grupoidinvalid");
+        	}
+        } else {
+        	List<Parametro> resParametros =parametroRepository.findAllWithGrupoParametro();
+        	resParametros.forEach(a-> System.out.println(a.getGrupoParametro().getNombre()));
+            return ResponseEntity.ok(resParametros);
+        }
     }
 
     /**

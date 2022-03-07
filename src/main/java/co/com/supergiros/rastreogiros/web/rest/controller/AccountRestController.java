@@ -2,17 +2,18 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -32,12 +33,25 @@ public class AccountRestController {
      * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
-    public Mono<UserVM> getAccount() {
+        public ResponseEntity<UserVM> getAccount() {
+    	
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	String currentPrincipalName = authentication.getName();
+    	if (currentPrincipalName==null) {
+    		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario no encontrado");
+    	}
+    	
+    	Set<String>strListaAuthorities = new HashSet<String>();
+    	authentication.getAuthorities().forEach(a->strListaAuthorities.add(a.getAuthority()));
+    	// .stream().map(a-> strListaAuthorities.add(a.getAuthority()));
+    	
+    	return ResponseEntity.ok(new UserVM(currentPrincipalName, strListaAuthorities));
+    	/*
         return ReactiveSecurityContextHolder
             .getContext()
             .map(SecurityContext::getAuthentication)
             .map(authentication -> {
-            	System.out.println("\n*******************\n" + authentication);
+            	System.out.println("\n*******************\n" );
                 String login;
                 if (authentication.getPrincipal() instanceof UserDetails) {
                     login = ((UserDetails) authentication.getPrincipal()).getUsername();
@@ -53,7 +67,7 @@ public class AccountRestController {
                     .collect(Collectors.toSet());
                 return new UserVM(login, authorities);
             })
-            .switchIfEmpty(Mono.error(new AccountRestControllerException()));
+            .switchIfEmpty(Mono.error(new AccountRestControllerException()));*/
     }
 
     /**

@@ -1,5 +1,6 @@
 package co.com.supergiros.rastreogiros.security;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsMapper;
 import org.springframework.stereotype.Component;
 
+import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
+import liquibase.pro.packaged.iF;
 
 @Component
 public class DirectorioActivoUserMapper extends LdapUserDetailsMapper{
@@ -34,11 +37,20 @@ public class DirectorioActivoUserMapper extends LdapUserDetailsMapper{
     public UserDetails mapUserFromContext(DirContextOperations ctx, String username, Collection<? extends GrantedAuthority> authorities){
 
     	List<SimpleGrantedAuthority> rolesAsignados = new ArrayList<SimpleGrantedAuthority>();
+
+		Usuario usuaTemp = usuarioService.findOneWithRolesByUsername(username);
+    	if (usuaTemp.getInicioInactivacion() != null 
+    			&& usuaTemp.getInicioInactivacion().compareTo(Instant.now())<=0 
+    			&& usuaTemp.getFinInactivacion().compareTo(Instant.now()) >=0 ) {
+    		log.error("El usuario se encuentra inactivo");
+    		throw new BadCredentialsException("El usuario " + username + " no tiene roles asignados en la aplicacion.");
+		}
     	
     	try {
         	usuarioService.findOneWithRolesByUsername(username)
 			.getRoles()
 			.forEach(rol -> rolesAsignados.add(new SimpleGrantedAuthority(rol.getNombre())));
+        	// Verificar si esta bloqueado
     	} catch (NoSuchElementException e) {
     		log.error("El usuario " + username + " no tiene roles asignados en la aplicacion.");
 			throw new BadCredentialsException("El usuario " + username + " no tiene roles asignados en la aplicacion.");

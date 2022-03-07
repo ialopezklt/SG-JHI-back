@@ -74,7 +74,7 @@ public class UsuarioPrivadoController {
     @PutMapping("/{usuarioId}")
     public ResponseEntity<Usuario> updateUsuario(
         @PathVariable(value = "usuarioId", required = false) final Long usuarioId,
-        @Valid @RequestBody Usuario usuario
+        @RequestBody Usuario usuario
     ) throws URISyntaxException {
         log.debug("REST request to update Usuario : {}, {}", usuarioId, usuario);
         if (usuario.getUsuarioId() == null) {
@@ -88,7 +88,23 @@ public class UsuarioPrivadoController {
 	        throw (new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
 	    }
 	    
-	    Usuario usuarioActualizado = usuarioRepository.save(usuario);
+	    Usuario usuarioActualizado = usuarioRepository.findByUsername(usuario.getUsername()).get();
+
+	    usuarioActualizado.setActivo(usuario.getActivo());
+	    usuarioActualizado.setCelular(usuario.getCelular());
+	    usuarioActualizado.setCorreo(usuario.getCorreo());
+	    usuarioActualizado.setInicioInactivacion(usuario.getInicioInactivacion());
+	    usuarioActualizado.setFinInactivacion(usuario.getFinInactivacion());
+	    usuarioActualizado.setNumeroDocumento(usuario.getNumeroDocumento());
+	    usuarioActualizado.setPrimerApellido(usuario.getPrimerApellido());
+	    usuarioActualizado.setPrimerNombre(usuario.getPrimerNombre());
+	    usuarioActualizado.setSegundoNombre(usuario.getSegundoNombre());
+	    usuarioActualizado.setSegundoApellido(usuario.getSegundoApellido());
+	    usuarioActualizado.setTipoDocumento(usuario.getTipoDocumento());	    
+	    
+	    System.out.println("Usuario que lleg:" + usuarioActualizado);
+
+	    usuarioActualizado = usuarioRepository.save(usuarioActualizado);
 	    
 	    if (usuarioActualizado==null) {
 	    	throw (new ResponseStatusException(HttpStatus.NOT_FOUND));

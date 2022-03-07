@@ -2,10 +2,13 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -13,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,12 +25,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import co.com.supergiros.rastreogiros.entity.LogUso;
 import co.com.supergiros.rastreogiros.repository.LogUsoRepository;
+import co.com.supergiros.rastreogiros.util.Constantes;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
 
@@ -223,5 +229,47 @@ public class LogUsoController {
                     .noContent()
                     .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
                     .build();
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/registroacceso")
+    public ResponseEntity<Void> registroAccesoFallido(@RequestParam(name = "tipodocumento") String tipoDocumento, @RequestParam(name = "numerodocumento") String numeroDocumento) {
+    	LogUso evento = new LogUso();
+    	Constantes.TipoDocumento tipoDocumento2 = Constantes.TipoDocumento.valueOf(tipoDocumento);
+    	
+    	evento.setTipoDocumento(tipoDocumento2);
+    	evento.setUsuario(numeroDocumento);
+    	evento.setNumeroDocumento(numeroDocumento);
+    	evento.setFechaHora(Instant.now());
+    	evento.setOpcion("logueo - acepta TyC");
+    	
+    	logUsoRepository.save(evento);
+    	
+    	return ResponseEntity
+                .noContent()
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, numeroDocumento))
+                .build();
+    	
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/registrorecuperaclave")
+    public ResponseEntity<Void> registroRecuperaClave(@RequestParam(name = "tipodocumento") String tipoDocumento, @RequestParam(name = "numerodocumento") String numeroDocumento) {
+    	LogUso evento = new LogUso();
+    	Constantes.TipoDocumento tipoDocumento2 = Constantes.TipoDocumento.valueOf(tipoDocumento);
+    	
+    	evento.setTipoDocumento(tipoDocumento2);
+    	evento.setUsuario(numeroDocumento);
+    	evento.setNumeroDocumento(numeroDocumento);
+    	evento.setFechaHora(Instant.now());
+    	evento.setOpcion("recuperar");
+    	
+    	logUsoRepository.save(evento);
+    	
+    	return ResponseEntity
+                .noContent()
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, numeroDocumento))
+                .build();
+    	
     }
 }

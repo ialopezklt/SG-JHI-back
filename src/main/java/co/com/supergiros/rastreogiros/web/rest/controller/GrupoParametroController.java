@@ -100,7 +100,7 @@ public class GrupoParametroController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
         
-        if (grupoParametroRepository.existsById(grupoParametroId)) {
+        if (!grupoParametroRepository.existsById(grupoParametroId)) {
         	throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
         

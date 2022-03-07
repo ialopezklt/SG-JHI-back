@@ -45,7 +45,6 @@ public class Rol implements Serializable {
     private String activo;
 
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonBackReference
     private Set<Usuario> usuariosPorRol = new HashSet<Usuario>();
 
     public void addUsuario(Usuario usuario) {

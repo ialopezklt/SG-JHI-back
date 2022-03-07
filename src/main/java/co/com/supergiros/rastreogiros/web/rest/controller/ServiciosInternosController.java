@@ -1,6 +1,8 @@
 package co.com.supergiros.rastreogiros.web.rest.controller;
 
 import java.io.StringWriter;
+import java.util.Calendar;
+import java.util.Optional;
 
 import javax.mail.internet.AddressException;
 
@@ -25,6 +27,7 @@ public class ServiciosInternosController {
 	UtilidadesService utilidadesService;
 	
 
+
     /**
      *  Para prueba del servidor de correo
      * @param to
@@ -35,15 +38,40 @@ public class ServiciosInternosController {
      */
 	@CreadoPorKalettre(author = "IAL", fecha = "Feb/2022")
     @GetMapping("/testemail")
-    public ResponseEntity<String> registrarUsuario(@RequestParam String to, @RequestParam String subject, @RequestParam String message)
+    public ResponseEntity<String> registrarUsuario(@RequestParam String to
+    							, @RequestParam String subject
+    							, @RequestParam String message
+    							, @RequestParam(required = false) Optional<String> tipo
+    							, @RequestParam(required = false) Optional<String> celular)
         throws AddressException {
         StringWriter stringWriter = new StringWriter();
 
         stringWriter.write(message);
 
-        utilidadesService.enviarEmail(to, subject, stringWriter);
+        if (celular.isPresent() && tipo.isPresent()) {
+	        switch (tipo.get()) {
+	        case "1": 
+	        	utilidadesService.enviarMensajeRegistro(to, celular.get());
+	        	break;
+	        case "2":
+	        	utilidadesService.enviarMensajeRegistroExitoso(to, celular.get());
+	        	break;
+	        case "3":
+	        	utilidadesService.enviarMensajeRecuperarContrasena(to, celular.get());
+	        	break;
+	        case "4":
+	        	utilidadesService.enviarMensajeActualizacionExitosa(to, celular.get());
+	        	break;
+	        default:
+	            utilidadesService.enviarEmail(to, subject, stringWriter);
+	        }
+        }
 
-        return new ResponseEntity<String>("Correo Enviado", HttpStatus.OK);
+        return new ResponseEntity<String>("Correo Enviado: " + Calendar.getInstance().get(Calendar.HOUR)
+				+ ":"+("0"+Calendar.getInstance().get(Calendar.MINUTE)).substring(("0"+Calendar.getInstance().get(Calendar.MINUTE)).length()-2)
+				+ ":"+("0"+Calendar.getInstance().get(Calendar.SECOND)).substring(("0"+Calendar.getInstance().get(Calendar.SECOND)).length()-2)
+        		, HttpStatus.OK);
+        
     }
 	
 }

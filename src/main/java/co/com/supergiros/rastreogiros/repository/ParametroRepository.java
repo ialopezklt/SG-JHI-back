@@ -16,4 +16,12 @@ public interface ParametroRepository extends JpaRepository<Parametro, Long> {
 
     @Query("select par from Parametro par where par.parametroId in :listaIds")
     public List<Parametro> findByListaId(@Param("listaIds") List<Long> listaIdParametros);
+    
+    @EntityGraph(attributePaths = "grupoParametro")
+    @Query("select par from Parametro par where par.grupoParametro = :grupoParametro")
+    public List<Parametro> findByGrupoParametroWithGrupoParametro(@Param("grupoParametro") GrupoParametros grupoParametro);
+    
+    @EntityGraph(attributePaths = "grupoParametro")
+    @Query("select par from Parametro par")
+    public List<Parametro> findAllWithGrupoParametro();
 }

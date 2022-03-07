@@ -1,8 +1,6 @@
 package co.com.supergiros.rastreogiros.entity;
 
 import co.com.supergiros.rastreogiros.util.Constantes;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -27,11 +26,14 @@ import org.jasypt.util.text.AES256TextEncryptor;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Parametro implements Serializable {
 
+	@PreUpdate
     @PrePersist
     void cifrar() {
         if (cifrado) {
-            AES256TextEncryptor textEncryptor = new AES256TextEncryptor();
-            textEncryptor.setPassword(Constantes.LLAVE_CIFRADO);
+        	
+        	AES256TextEncryptor textEncryptor = new AES256TextEncryptor();
+        	textEncryptor.setPassword(Constantes.LLAVE_CIFRADO);
+        	
             valor = textEncryptor.encrypt(valor);
         }
         return;
@@ -41,8 +43,10 @@ public class Parametro implements Serializable {
     void desCifrar() {
     	valor=valor.trim();
         if (cifrado) {
-            AES256TextEncryptor textEncryptor = new AES256TextEncryptor();
-            textEncryptor.setPassword(Constantes.LLAVE_CIFRADO);
+
+        	AES256TextEncryptor textEncryptor = new AES256TextEncryptor();
+        	textEncryptor.setPassword(Constantes.LLAVE_CIFRADO);
+
             valor = textEncryptor.decrypt(valor);
         }
         return;
@@ -72,7 +76,5 @@ public class Parametro implements Serializable {
     /* Relaciones ===================================*/
     @ManyToOne
     @JoinColumn(name = "grupo_parametro_id")
-    @JsonBackReference
-    @JsonIgnoreProperties(value = { "parametros" }, allowSetters = true)
     private GrupoParametros grupoParametro;
 }

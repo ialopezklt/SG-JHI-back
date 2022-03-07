@@ -3,8 +3,6 @@ package co.com.supergiros.rastreogiros.entity;
 import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
 import co.com.supergiros.rastreogiros.util.Constantes.TipoUsuario;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
@@ -46,7 +44,6 @@ public class Usuario implements Serializable {
     // Aplica solo para usuario internos, es el SAMAccountName, para los externos se asgina el nro identificacion
     private String username;
 
-    @JsonIgnore
     @NotNull(message = "LA clave no debe ser nulo y minimo 5 chars")
     @Size(min = 5)
     @Column(name = "clave", nullable = false)
@@ -110,7 +107,6 @@ public class Usuario implements Serializable {
     // ================================ RELACIONES ========================
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     @JoinTable(name = "rol_por_usuario", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private Set<Rol> roles = new HashSet<Rol>();
 

@@ -8,6 +8,7 @@ import co.com.supergiros.rastreogiros.entity.Rol;
 import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.RolRepository;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
+import co.com.supergiros.rastreogiros.service.LogUsosService;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
 import co.com.supergiros.rastreogiros.service.UtilidadesService;
 import co.com.supergiros.rastreogiros.util.Constantes;
@@ -41,6 +42,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     RolRepository rolRepository;
+    
+    @Autowired
+    LogUsosService logUsosService;
 
     @Override
     public Usuario findByCorreo(String correo) {
@@ -83,6 +87,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         
         log.debug("Creacion exitosa de usuario publico con username " + usuarioNuevo.getUsername());
+        logUsosService.registraEvento("Registro");
 
         return usuarioConverter.Entity2DTO(usuarioNuevo);
     }
@@ -112,6 +117,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setClave(encryptedPassword);
         usuario = usuarioRepository.save(usuario);
+        
+        logUsosService.registraEvento("Recuperar contraseña");
         
         log.debug("Cambio de clave exitoso usuario " + usuario);
 

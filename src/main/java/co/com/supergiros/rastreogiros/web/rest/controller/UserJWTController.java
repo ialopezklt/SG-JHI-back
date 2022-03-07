@@ -3,8 +3,12 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 import co.com.supergiros.rastreogiros.domain.AuthRequest;
 import co.com.supergiros.rastreogiros.security.jwt.JWTFilter;
 import co.com.supergiros.rastreogiros.security.jwt.TokenProvider;
+import co.com.supergiros.rastreogiros.service.LogUsosService;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,9 @@ public class UserJWTController {
     private final TokenProvider tokenProvider;
 
     private final AuthenticationManager authenticationManager;
+    
+    @Autowired
+    LogUsosService logUsosService;;
 
     public UserJWTController(TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
         this.tokenProvider = tokenProvider;
@@ -32,7 +39,8 @@ public class UserJWTController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody AuthRequest loginVM) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+    	
+    	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
             loginVM.getUsername(),
             loginVM.getPassword()
         );
@@ -44,6 +52,8 @@ public class UserJWTController {
         String jwt = tokenProvider.createToken(authentication, rememberMe);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        logUsosService.registraEvento("Autenticar");
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
     }
 

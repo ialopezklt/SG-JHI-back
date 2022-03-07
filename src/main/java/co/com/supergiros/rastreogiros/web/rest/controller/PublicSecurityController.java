@@ -1,6 +1,5 @@
 package co.com.supergiros.rastreogiros.web.rest.controller;
 
-import co.com.supergiros.rastreogiros.CreadoPorKalettre;
 import co.com.supergiros.rastreogiros.DTO.UsuarioPublicoDTO;
 import co.com.supergiros.rastreogiros.DTO.UsuarioRecuperarClave;
 import co.com.supergiros.rastreogiros.domain.CodigosMensaje;
@@ -13,11 +12,7 @@ import co.com.supergiros.rastreogiros.service.UtilidadesService;
 import co.com.supergiros.rastreogiros.service.impl.UtilidadesServiceImpl;
 import co.com.supergiros.rastreogiros.util.Constantes;
 
-import java.io.StringWriter;
-import java.time.Instant;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.mail.internet.AddressException;
@@ -204,51 +199,4 @@ public class PublicSecurityController {
         return new ResponseEntity<CodigosMensaje>(codigosEnviados, HttpStatus.OK);
     }
 
-
-    /**
-     *  Para prueba del servidor de correo
-     * @param to
-     * @param subject
-     * @param message
-     * @return
-     * @throws AddressException
-     */
-	@CreadoPorKalettre(author = "IAL", fecha = "Feb/2022")
-    @GetMapping("/testemail")
-    public ResponseEntity<String> registrarUsuario(@RequestParam String to
-    							, @RequestParam String subject
-    							, @RequestParam String message
-    							, @RequestParam(required = false) Optional<String> tipo
-    							, @RequestParam(required = false) Optional<String> celular)
-        throws AddressException {
-        StringWriter stringWriter = new StringWriter();
-
-        stringWriter.write(message);
-
-        if (celular.isPresent() && tipo.isPresent()) {
-	        switch (tipo.get()) {
-	        case "1": 
-	        	utilidadesService.enviarMensajeRegistro(to, celular.get());
-	        	break;
-	        case "2":
-	        	utilidadesService.enviarMensajeRegistroExitoso(to, celular.get());
-	        	break;
-	        case "3":
-	        	utilidadesService.enviarMensajeRecuperarContrasena(to, celular.get());
-	        	break;
-	        case "4":
-	        	utilidadesService.enviarMensajeActualizacionExitosa(to, celular.get());
-	        	break;
-	        default:
-	            utilidadesService.enviarEmail(to, subject, stringWriter);
-	        }
-        }
-
-        return new ResponseEntity<String>("Correo Enviado: " + Calendar.getInstance().get(Calendar.HOUR)
-				+ ":"+("0"+Calendar.getInstance().get(Calendar.MINUTE)).substring(("0"+Calendar.getInstance().get(Calendar.MINUTE)).length()-2)
-				+ ":"+("0"+Calendar.getInstance().get(Calendar.SECOND)).substring(("0"+Calendar.getInstance().get(Calendar.SECOND)).length()-2)
-        		, HttpStatus.OK);
-        
-    }
-	
 }

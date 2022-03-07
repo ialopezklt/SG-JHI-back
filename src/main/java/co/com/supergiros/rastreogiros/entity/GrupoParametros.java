@@ -1,7 +1,5 @@
 package co.com.supergiros.rastreogiros.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,12 +43,13 @@ public class GrupoParametros implements Serializable {
 
     @OneToMany(mappedBy = "grupoParametro")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonManagedReference
-    @JsonIgnoreProperties(value = { "grupoParametro" }, allowSetters = true)
     private Set<Parametro> parametros = new HashSet<>();
 
     @Override
     public String toString() {
-        return "{'id': '" + String.valueOf(grupoParametroId) + "', 'nombre':'" + nombre + "', 'activo':'" + activo + "'}";
+        return "{'grupoParametroId': '" + String.valueOf(grupoParametroId) + "', 'nombre':'" + nombre + "', 'activo':'" + activo + "'}";
     }
+
+
+    
 }

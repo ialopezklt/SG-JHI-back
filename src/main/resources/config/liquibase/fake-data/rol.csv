@@ -1,4 +1,5 @@
 rol_id;nombre;activo
-1;admin;S
-2;Gestor;S
-3;Publico;S
+1;ADMIN;S
+2;GESTOR;S
+3;PUBLICO;S
+4;ADMIN-TI;S
