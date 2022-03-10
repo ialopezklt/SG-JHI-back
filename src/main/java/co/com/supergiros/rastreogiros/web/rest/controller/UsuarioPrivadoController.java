@@ -3,6 +3,9 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
+import liquibase.pro.packaged.iF;
+import net.bytebuddy.asm.Advice.Thrown;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -219,6 +222,21 @@ public class UsuarioPrivadoController {
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         log.debug("REST request to get all Usuarios");
         return ResponseEntity.ok().body(usuarioRepository.findAll());
+    }
+
+    /**
+     * {@code GET  /} : get all the usuarios.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of usuarios in body.
+     */
+    @GetMapping("/byusername/{username}")
+    public ResponseEntity<Usuario> getByUsername(@PathVariable String username) {
+        log.debug("REST request to get usuario by username");
+        Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
+        if (usuario.isPresent()) {
+            return ResponseEntity.ok().body(usuario.get());
+        }
+        throw new BadRequestAlertException("Invalid Username", ENTITY_NAME, "idinvalid");
     }
 
     /**

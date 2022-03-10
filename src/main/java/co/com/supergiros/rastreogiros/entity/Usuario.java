@@ -5,6 +5,7 @@ import co.com.supergiros.rastreogiros.util.Constantes.TipoUsuario;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -95,7 +96,7 @@ public class Usuario implements Serializable {
     private Instant finInactivacion;
 
     @Column(name = "fecha_creacion")
-    private Instant fechaCreacion;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "creado_por")
     private String creadoPor;

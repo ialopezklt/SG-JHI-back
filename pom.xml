@@ -7,10 +7,10 @@
 
     <groupId>co.com.supergiros.rastreogiros</groupId>
     <artifactId>back-rastreo-giros</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>Back Rastreo Giros</name>
-    <description>Description for BackRastreoGiros</description>
+    <version>0.0.1-Beta</version>
+    <packaging>war</packaging>
+    <name>Back Rastreo Giros by kalettre.com</name>
+    <description>Microservicio BackRastreoGiros</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -892,6 +892,27 @@
                         <groupId>org.liquibase</groupId>
                         <artifactId>liquibase-maven-plugin</artifactId>
                     </plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<id>antrun-plugin</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<echo message="*****************************************" level="info" />
+										<echo message="***          MONTANDO PERFIL DEV       **" level="info"  />
+										<echo message="*****************************************"  level="info" />
+										<echo message="Build dir: ${project.build.directory}" level="info" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
                 </plugins>
                 <pluginManagement>
                     <plugins>
@@ -946,6 +967,97 @@
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>sgqa</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+                <pluginManagement>
+                    <plugins>
+						<plugin>
+							<artifactId>maven-antrun-plugin</artifactId>
+							<version>3.0.0</version>
+							<executions>
+								<execution>
+									<id>antrun-plugin-en-validate</id>
+									<phase>validate</phase>
+									<goals>
+										<goal>run</goal>
+									</goals>
+									<configuration>
+										<target>
+											<echo message="*****************************************" level="info" />
+											<echo message="***          MONTANDO PERFIL SGQA      **" level="info"  />
+											<echo message="*****************************************"  level="info" />
+											<echo message="Build dir: ${project.build.directory}" level="info" />
+										</target>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+                        <plugin>
+                            <groupId>org.liquibase</groupId>
+                            <artifactId>liquibase-maven-plugin</artifactId>
+                            <version>${liquibase.version}</version>
+                            <configuration>
+                                <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>
+                                <diffChangeLogFile>${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                                <driver>org.postgresql.Driver</driver>
+                                <url>jdbc:postgresql://localhost:5432/BackRastreoGiros</url>
+                                <defaultSchemaName></defaultSchemaName>
+                                <username>BackRastreoGiros</username>
+                                <password></password>
+                                <referenceUrl>hibernate:spring:co.com.supergiros.rastreogiros.domain?dialect=tech.jhipster.domain.util.FixedPostgreSQL10Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                                <verbose>true</verbose>
+                                <logging>debug</logging>
+                                <contexts>!test</contexts>
+                            </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.liquibase</groupId>
+                                    <artifactId>liquibase-core</artifactId>
+                                    <version>${liquibase.version}</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.liquibase.ext</groupId>
+                                    <artifactId>liquibase-hibernate5</artifactId>
+                                    <version>${liquibase-hibernate5.version}</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.springframework.boot</groupId>
+                                    <artifactId>spring-boot-starter-data-jpa</artifactId>
+                                    <version>${spring-boot.version}</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>javax.validation</groupId>
+                                    <artifactId>validation-api</artifactId>
+                                    <version>${validation-api.version}</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>tech.jhipster</groupId>
+                                    <artifactId>jhipster-framework</artifactId>
+                                    <version>${jhipster-dependencies.version}</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+            <properties>
+                <!-- default Spring profiles -->
+                <spring.profiles.active>sgqa${profile.tls}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>

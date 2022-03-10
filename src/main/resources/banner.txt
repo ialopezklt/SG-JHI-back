@@ -5,5 +5,7 @@
   ${AnsiColor.DEFAULT}_|"""""| _|"""""| _|"""""| _|"""""| _|"""""| _|"""""| _|"""""| _|"""""| 
   ${AnsiColor.DEFAULT}"`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' 
 
+Aplicación: ${application.title} version ${application.version}
+
 www.kalettre.com
 Kalettre SAS (c) 2022

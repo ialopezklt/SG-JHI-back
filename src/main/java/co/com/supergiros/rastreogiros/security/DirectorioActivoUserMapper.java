@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
-import liquibase.pro.packaged.iF;
 
 @Component
 public class DirectorioActivoUserMapper extends LdapUserDetailsMapper{

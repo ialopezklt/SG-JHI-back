@@ -2,7 +2,9 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 
 import co.com.supergiros.rastreogiros.entity.Rol;
 import co.com.supergiros.rastreogiros.repository.RolRepository;
+import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +31,9 @@ public class RolController {
     private final Logger log = LoggerFactory.getLogger(RolController.class);
 
     private static final String ENTITY_NAME = "rol";
+    
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -86,8 +92,11 @@ public class RolController {
         if (!rolRepository.existsById(rolId)) {
             throw (new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
         }
+        System.out.println("\n****************************\nrol recibido:" + rolRecibido);
 
         Rol nuevoRol =  rolRepository.save(rolRecibido);
+        System.out.println("\n****************************\nrol grabado:" + nuevoRol);
+        
         if (nuevoRol==null) {
         	throw (new ResponseStatusException(HttpStatus.NOT_FOUND));
         }
@@ -169,7 +178,7 @@ public class RolController {
     @GetMapping("/rols/{id}")
     public ResponseEntity<Rol> getRol(@PathVariable Long id) {
         log.debug("REST request to get Rol : {}", id);
-        Optional<Rol> rol = rolRepository.findById(id);
+        Optional<Rol> rol = rolRepository.findByIdWithUsuarios(id);
         if(rol.isPresent()) {
             return ResponseEntity.ok().body(rol.get());
         }

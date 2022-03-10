@@ -63,7 +63,7 @@ public class TokenProvider {
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
-    	System.out.println("\n*****************************\nen createToken" + authentication.getName());
+    	
     	String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
@@ -84,19 +84,15 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-    	System.out.println("Entro a TokenProvider->getAuthentication");
     	Claims claims = jwtParser.parseClaimsJws(token).getBody();
-System.out.println("1");
+
         Collection<? extends GrantedAuthority> authorities = Arrays
             .stream(claims.get(AUTHORITIES_KEY).toString().split(","))
             .filter(auth -> !auth.trim().isEmpty())
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
-        System.out.println("3");
-
+        
         User principal = new User(claims.getSubject(), "", authorities);
-        System.out.println("principal-username:" + principal.getUsername());
-        System.out.println("authorities:" + authorities.toString());
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

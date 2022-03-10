@@ -2,13 +2,11 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -240,7 +238,7 @@ public class LogUsoController {
     	evento.setTipoDocumento(tipoDocumento2);
     	evento.setUsuario(numeroDocumento);
     	evento.setNumeroDocumento(numeroDocumento);
-    	evento.setFechaHora(Instant.now());
+    	evento.setFechaHora(LocalDateTime.now());
     	evento.setOpcion("logueo - acepta TyC");
     	
     	logUsoRepository.save(evento);
@@ -261,7 +259,7 @@ public class LogUsoController {
     	evento.setTipoDocumento(tipoDocumento2);
     	evento.setUsuario(numeroDocumento);
     	evento.setNumeroDocumento(numeroDocumento);
-    	evento.setFechaHora(Instant.now());
+    	evento.setFechaHora(LocalDateTime.now());
     	evento.setOpcion("recuperar");
     	
     	logUsoRepository.save(evento);

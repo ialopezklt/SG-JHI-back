@@ -23,6 +23,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @EntityGraph(attributePaths = "roles")
     Optional<Usuario> findOneWithRolesByUsername(String username);
     
-    @Query("select rolusuario from Usuario usr join Rol rolusuario where usr.username = :username and rolusuario.activo = 'S'")
+    @Query("select rol "
+    		+ "from Rol rol "
+    		+ "join RolPorUsuario rpu on rpu.rol.rolId = rol.rolId "
+    		+ "join Usuario usr on usr.usuarioId = rpu.usuario.usuarioId and  usr.username = :username "
+    		+ " where rol.activo = 'S'")
     public Set<Rol> getRolesActivosPorUsername (@Param("username") String username);
 }

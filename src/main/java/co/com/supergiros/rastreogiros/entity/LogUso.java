@@ -2,7 +2,8 @@ package co.com.supergiros.rastreogiros.entity;
 
 import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import lombok.Data;
@@ -34,7 +35,7 @@ public class LogUso implements Serializable {
     private String opcion;
 
     @Column(name = "fecha_hora")
-    private Instant fechaHora;
+    private LocalDateTime fechaHora;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_documento")

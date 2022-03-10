@@ -1,6 +1,7 @@
 package co.com.supergiros.rastreogiros.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -55,7 +56,7 @@ public class LogUsoServiceImpl implements LogUsosService {
 		evento.setTipoDocumento(usuario.get().getTipoDocumento());
 		evento.setUsuario(usuario.get().getUsername());
 		evento.setNumeroDocumento(usuario.get().getNumeroDocumento());
-		evento.setFechaHora(Instant.now());
+		evento.setFechaHora(LocalDateTime.now());
 		evento.setOpcion(nombreEvento);
 		
 		logUsoRepository.save(evento);
@@ -79,7 +80,7 @@ public class LogUsoServiceImpl implements LogUsosService {
 		evento.setTipoDocumento(usuario.get().getTipoDocumento());
 		evento.setUsuario(usuario.get().getUsername());
 		evento.setNumeroDocumento(usuario.get().getNumeroDocumento());
-		evento.setFechaHora(Instant.now());
+		evento.setFechaHora(LocalDateTime.now());
 		evento.setOpcion("consulta estado");
 		evento.setPin(pin);
 		
@@ -94,7 +95,7 @@ public class LogUsoServiceImpl implements LogUsosService {
 		evento.setTipoDocumento(Constantes.TipoDocumento.valueOf(tipoDocumento));
 		evento.setUsuario(numeroDocumento);
 		evento.setNumeroDocumento(numeroDocumento);
-		evento.setFechaHora(Instant.now());
+		evento.setFechaHora(LocalDateTime.now());
 		evento.setOpcion("Logueo");
 		
 		logUsoRepository.save(evento);

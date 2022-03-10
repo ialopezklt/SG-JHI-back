@@ -1,6 +1,5 @@
 package co.com.supergiros.rastreogiros.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;

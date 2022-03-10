@@ -6,15 +6,17 @@ import co.com.supergiros.rastreogiros.DTO.UsuarioRecuperarClave;
 import co.com.supergiros.rastreogiros.converter.UsuarioConverter;
 import co.com.supergiros.rastreogiros.entity.Rol;
 import co.com.supergiros.rastreogiros.entity.Usuario;
+import co.com.supergiros.rastreogiros.repository.ParametroRepository;
 import co.com.supergiros.rastreogiros.repository.RolRepository;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.service.LogUsosService;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
 import co.com.supergiros.rastreogiros.service.UtilidadesService;
 import co.com.supergiros.rastreogiros.util.Constantes;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.mail.internet.AddressException;
 import javax.transaction.Transactional;
 import org.jasypt.util.password.StrongPasswordEncryptor;
@@ -45,6 +47,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     
     @Autowired
     LogUsosService logUsosService;
+    
+    @Autowired
+    ParametroRepository parametroRepository;
 
     @Override
     public Usuario findByCorreo(String correo) {
@@ -69,15 +74,19 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioNuevo.setTipoUsuario(Constantes.TipoUsuario.Externo);
         usuarioNuevo.setActivo(true);
         usuarioNuevo.setClave(encryptedPassword);
-        usuarioNuevo.setFechaCreacion(Instant.now());
+        usuarioNuevo.setFechaCreacion(LocalDateTime.now());
         usuarioNuevo = usuarioRepository.save(usuarioNuevo);
         if (usuarioNuevo == null) {
         	throw new RuntimeException("No se pudo crear el usuario");
         }
-        Rol rol = rolRepository.findById(3L).get();
-        Set<Rol> listaRoles = new HashSet<Rol>();
-        listaRoles.add(rol);
-        usuarioNuevo.setRoles(listaRoles);
+        // Obtiene el ID 3 correspondiente al Rol 'PUBLICO'
+        Long idParametroRolPublico =  Long.valueOf(this.parametroRepository.findById(Constantes.ID_PAR_ROL_PUBLICO).get().getValor());
+        Rol rol = rolRepository.findById(idParametroRolPublico).get();
+        Set<Rol> listaRolesDummyRols = new HashSet<Rol>();
+        listaRolesDummyRols.add(rol);
+        
+        usuarioNuevo.setRoles(listaRolesDummyRols);
+        
         try {
             utilidadesService.enviarMensajeRegistroExitoso(usuarioNuevo.getCorreo(), String.valueOf(usuarioNuevo.getCelular()));
         } catch (AddressException e) {
@@ -157,4 +166,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         
         return usuarioConsultado;
     }
+    
+    // =================================================================================================
+			
 }

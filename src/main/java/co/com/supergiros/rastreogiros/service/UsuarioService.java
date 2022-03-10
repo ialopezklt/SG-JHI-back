@@ -18,4 +18,5 @@ public interface UsuarioService {
 	Usuario findOneWithRolesByUsername(String username);
 
 	public Usuario actualizarDatos(UsuarioRecuperarClave usuario);
+
 }

@@ -106,6 +106,8 @@ public class Constantes {
     public static final Long ID_EMAIL_STARTTLS_ENABLE = 12L;
     public static final Long ID_EMAIL_AUTH = 13L;
     public static final Long ID_EMAIL_FROM_ADDRESS = 14L;
+    
+    public static final Long ID_PAR_ROL_PUBLICO = 39L;
 
     // constantes SMS
     public static final Long ID_SMS_URLSISTEMA_EXTERNO = 17L;

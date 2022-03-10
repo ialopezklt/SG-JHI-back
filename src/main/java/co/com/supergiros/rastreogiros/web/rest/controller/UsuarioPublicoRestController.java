@@ -6,6 +6,7 @@ import co.com.supergiros.rastreogiros.DTO.UsuarioRecuperarClave;
 import co.com.supergiros.rastreogiros.converter.UsuarioConverter;
 import co.com.supergiros.rastreogiros.domain.Account;
 import co.com.supergiros.rastreogiros.entity.Usuario;
+import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class UsuarioPublicoRestController {
 
     @Autowired
     UsuarioService usuarioService;
+    
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
     /*
      * Trae los datos del usuario logueado
@@ -65,7 +69,7 @@ public class UsuarioPublicoRestController {
         Usuario usuario = usuarioService.findOneWithRolesByUsername(currentPrincipalName);
         
         account.setActivated(usuario.getActivo());
-        account.setAuthorities(usuario.getRoles());
+        account.setAuthorities(usuarioRepository.getRolesActivosPorUsername(currentPrincipalName));
         account.setEmail(usuario.getCorreo());
         account.setFirstName(usuario.getPrimerNombre());
         account.setLangKey("es");
