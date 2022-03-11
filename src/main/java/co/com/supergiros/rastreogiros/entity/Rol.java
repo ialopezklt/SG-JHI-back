@@ -43,7 +43,7 @@ public class Rol implements Serializable {
     @Column(name = "activo", nullable = false)
     private String activo;
 
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<Usuario> usuariosPorRol = new HashSet<Usuario>();
 
     public void addUsuario(Usuario usuario) {

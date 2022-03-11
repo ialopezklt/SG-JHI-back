@@ -40,6 +40,8 @@ public class UserJWTController {
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody AuthRequest loginVM) {
     	
+    	logUsosService.registraEvento("Logueo", "N");
+        
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
             loginVM.getUsername(),
             loginVM.getPassword()
@@ -53,7 +55,6 @@ public class UserJWTController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        logUsosService.registraEvento("Autenticar");
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
     }
 

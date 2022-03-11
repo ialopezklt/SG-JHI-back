@@ -4,6 +4,7 @@ import co.com.supergiros.rastreogiros.BackRastreoGirosApp;
 import co.com.supergiros.rastreogiros.domain.RespuestaConsultaGiro;
 import co.com.supergiros.rastreogiros.repository.ParametroRepository;
 import co.com.supergiros.rastreogiros.service.ConsultaGiroService;
+import co.com.supergiros.rastreogiros.service.LogUsosService;
 import co.com.supergiros.rastreogiros.util.Constantes;
 import lombok.Data;
 
@@ -20,6 +21,9 @@ public class ConsultaGiroServiceImpl implements ConsultaGiroService {
 
     @Autowired
     ParametroRepository parametroRepository;
+    
+    @Autowired
+    LogUsosService logUsoService;
 
     @Override
     public RespuestaConsultaGiro consultaSims(String pin, String numeroDocumento, String tipoDocumento) {
@@ -35,6 +39,9 @@ public class ConsultaGiroServiceImpl implements ConsultaGiroService {
             parametrosConsultaGiro.setTipoDocumentoCliente(Constantes.TipoDocumentoSIMS.valueOf(tipoDocumento).label);
 
             respuesta = restTemplate.postForObject(urlSims, parametrosConsultaGiro, RespuestaConsultaGiro.class);
+            
+            logUsoService.registraEvento(numeroDocumento, tipoDocumento, numeroDocumento, "Consulta Estado", "N");
+            
         } catch (NumberFormatException e) {
         	respuesta = new RespuestaConsultaGiro();
         	respuesta.setEstado("error");

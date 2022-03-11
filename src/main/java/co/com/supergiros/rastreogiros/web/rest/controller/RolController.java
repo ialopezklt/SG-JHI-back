@@ -96,6 +96,11 @@ public class RolController {
 
         Rol nuevoRol =  rolRepository.save(rolRecibido);
         System.out.println("\n****************************\nrol grabado:" + nuevoRol);
+        rolRecibido.getUsuariosPorRol().forEach((usr)->{ 
+        	System.out.println("\n*****************roles del usuario antes:" + usr.getRoles());
+        	usr = usr.addRol(nuevoRol); 
+        	System.out.println("\n********************roles del usuario despues:" + usr.getRoles());
+        	usuarioRepository.save(usr);});
         
         if (nuevoRol==null) {
         	throw (new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -166,7 +171,7 @@ public class RolController {
     @GetMapping("/rols")
     public ResponseEntity<Object> getAllRols(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Rols");
-        return ResponseEntity.ok(rolRepository.findAll());
+        return ResponseEntity.ok(rolRepository.findAllWithUsuarios());
     }
 
     /**

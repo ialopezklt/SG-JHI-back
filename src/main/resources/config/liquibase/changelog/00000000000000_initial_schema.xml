@@ -23,7 +23,7 @@
                 <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>
-            <column name="local_date_time" type="timestamp"/>
+            <column name="local_date_time" type="timestampz"/>
             <column name="offset_date_time" type="timestamp"/>
             <column name="zoned_date_time" type="timestamp"/>
             <column name="local_time" type="time"/>

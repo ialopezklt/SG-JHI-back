@@ -111,6 +111,18 @@ public class Usuario implements Serializable {
     @JoinTable(name = "rol_por_usuario", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private Set<Rol> roles = new HashSet<Rol>();
 
+    // Helpers ======================================
+    
+    public Usuario addRol(Rol rol) {
+    	Set<Rol> listaRolesUsuario = this.getRoles();
+    	if (listaRolesUsuario == null) {
+    		listaRolesUsuario = new HashSet<Rol>();
+    	}
+    	listaRolesUsuario.add(rol);
+    	this.setRoles(listaRolesUsuario);
+    	return this;
+    }
+    
     @Override
     public String toString() {
         return "{'username': '" + username + "', 'numeroDocumento':'" + numeroDocumento + "', 'tipoDocumento':'" + tipoDocumento + "'}";

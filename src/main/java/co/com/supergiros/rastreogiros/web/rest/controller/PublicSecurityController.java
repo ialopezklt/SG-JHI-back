@@ -6,6 +6,7 @@ import co.com.supergiros.rastreogiros.domain.CodigosMensaje;
 import co.com.supergiros.rastreogiros.entity.Parametro;
 import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.exceptions.UsuarioExisteException;
+import co.com.supergiros.rastreogiros.service.LogUsosService;
 import co.com.supergiros.rastreogiros.service.ParametroService;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
 import co.com.supergiros.rastreogiros.service.UtilidadesService;
@@ -42,6 +43,9 @@ public class PublicSecurityController {
     @Autowired
     UtilidadesService utilidadesService;
 
+    @Autowired
+    LogUsosService logUsosService;
+    
     @Autowired
     ParametroService parametroService;
 
@@ -90,9 +94,15 @@ public class PublicSecurityController {
     public ResponseEntity<UsuarioRecuperarClave> consultaUsuario(@RequestParam String usuario) {
         Usuario usuarioC = usuarioService.findByUsername(usuario);
         UsuarioRecuperarClave usuarioRecuperarClave = new UsuarioRecuperarClave();
-
+        
         if (usuarioC != null) {
             try {
+            	
+            	logUsosService.registraEvento(usuario
+            			, usuarioC.getTipoDocumento().label
+            			, usuarioC.getNumeroDocumento()
+            			, "Recuperar contraseña", "N");
+                            	
                 CodigosMensaje codigosMensaje = utilidadesService.enviarMensajeRecuperarContrasena(
                     usuarioC.getCorreo(),
                     String.valueOf(usuarioC.getCelular())
@@ -111,6 +121,11 @@ public class PublicSecurityController {
 
             return new ResponseEntity<UsuarioRecuperarClave>(usuarioRecuperarClave, HttpStatus.OK);
         } else {
+        	logUsosService.registraEvento(usuario
+        			, null
+        			, usuario
+        			, "Recuperar contraseña", "N");
+                        	
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario no encontrado", null);
         }
     }
@@ -155,6 +170,10 @@ public class PublicSecurityController {
         } catch (UsuarioExisteException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario no creado por validaciones internas", e);
         }
+
+        logUsosService.registraEvento(usuarioPublicoDTO.getUsername(), usuarioPublicoDTO.getTipoDocumento().label
+        		, usuarioPublicoDTO.getNumeroDocumento(), "Registro", "N");
+        
 
         UsuarioPublicoDTO usuarioPublicoDTOCreado = usuarioService.crearUsuarioPublico(usuarioPublicoDTO);
 

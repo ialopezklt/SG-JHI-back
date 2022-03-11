@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import co.com.supergiros.rastreogiros.entity.LogUso;
 import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.LogUsoRepository;
@@ -32,7 +33,27 @@ public class LogUsoServiceImpl implements LogUsosService {
 	 * Registro log de ingreso a la aplicación
 	 */
 	@Override
-	public void registraEvento(String nombreEvento) {
+	public void registraEvento(String username, String tipoDocumento, String numeroDocumento, String nombreEvento, String sospechoso) {
+		
+		LogUso evento = new LogUso();
+		
+		evento.setTipoDocumento(Constantes.TipoDocumento.valueOf(tipoDocumento));
+		evento.setUsuario(username);
+		evento.setNumeroDocumento(numeroDocumento);
+		evento.setFechaHora(LocalDateTime.now());
+		evento.setOpcion(nombreEvento);
+		evento.setClienteSospechoso(sospechoso);
+		
+		logUsoRepository.save(evento);
+	
+	}
+
+		
+	/**
+	 * Registro log de ingreso a la aplicación
+	 */
+	@Override
+	public void registraEvento(String nombreEvento, String sospechoso) {
 		
 		LogUso evento = new LogUso();
 		
@@ -47,7 +68,9 @@ public class LogUsoServiceImpl implements LogUsosService {
 
     	Usuario usuarioActualizadoUsuario = usuario.get();
     	
-    	usuarioActualizadoUsuario.setUltimoIngreso(Instant.now());
+    	if (nombreEvento.equals("Autenticar")) {
+        	usuarioActualizadoUsuario.setUltimoIngreso(Instant.now());
+    	}
     	
     	// TODO. actualizar hora de ingreso
     	// usuarioActualizadoUsuario = usuarioRepository.save(usuarioActualizadoUsuario);

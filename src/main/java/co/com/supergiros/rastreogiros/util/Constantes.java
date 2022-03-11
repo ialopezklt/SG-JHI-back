@@ -149,4 +149,6 @@ public class Constantes {
     public static final Long ID_PAR_URL_SIMS = 15L;
 
     public static final String LLAVE_CIFRADO = "SVZBTiBBTEVYSVMgTE9QRVogLSBLQUxFVFRSRSBTLkEuUw==";
+    
+    public static int intentosLogin = 0;
 }

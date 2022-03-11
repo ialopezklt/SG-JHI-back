@@ -50,12 +50,12 @@ spring:
 #    url: jdbc:postgresql://10.232.12.28:5432/RASTREO_GIRO_QA
 #    username: rastreo_qa
 #    password: rastreo_qa
-    url: jdbc:postgresql://10.232.12.28:5432/RASTREO_GIRO_DESARROLLO
-    username: rastreo_desarrollo
-    password: rastreo_desarrollo
-#    url: jdbc:postgresql://slindbs01:5432/rastreogiros
-#    username: giros
-#    password: giros
+#    url: jdbc:postgresql://10.232.12.28:5432/RASTREO_GIRO_DESARROLLO
+#    username: rastreo_desarrollo
+#    password: rastreo_desarrollo
+    url: jdbc:postgresql://slindbs01:5432/rastreogiros
+    username: giros
+    password: giros
     hikari:
       poolName: Hikari
       auto-commit: false

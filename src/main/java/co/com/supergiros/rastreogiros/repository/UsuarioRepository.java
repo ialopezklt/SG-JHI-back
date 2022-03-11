@@ -25,8 +25,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     
     @Query("select rol "
     		+ "from Rol rol "
-    		+ "join RolPorUsuario rpu on rpu.rol.rolId = rol.rolId "
-    		+ "join Usuario usr on usr.usuarioId = rpu.usuario.usuarioId and  usr.username = :username "
-    		+ " where rol.activo = 'S'")
+    		+ "join Usuario usr"
+    		+ " where  usr.username = :username  and rol.activo = 'S'")
     public Set<Rol> getRolesActivosPorUsername (@Param("username") String username);
 }

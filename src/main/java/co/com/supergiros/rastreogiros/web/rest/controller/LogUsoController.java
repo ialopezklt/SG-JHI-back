@@ -196,6 +196,47 @@ public class LogUsoController {
     }
 
     /**
+     * {@code GET  /log-usos} : get all the logUsos con criterios
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of logUsos in body.
+     */
+    @GetMapping("/log-usos/criteria")
+    public ResponseEntity<List<LogUso>> getLogUsosConCriterios( 
+    		@RequestParam String fechaIni,
+    		@RequestParam String fechaFin,
+    		@RequestParam String pin,
+    		@RequestParam String numeroIdentificacion,
+    		@RequestParam String clienteSospechoso
+    		) {
+        log.debug("REST request to get all LogUsos getLogUsosConCriterios");
+        
+        fechaIni = fechaIni.equals("null")||fechaIni.isEmpty()?"1900-1-1":fechaIni;
+        pin=(pin.equals("null")||pin.isEmpty()?null:pin);
+        numeroIdentificacion=(numeroIdentificacion.equals("null")||numeroIdentificacion.isEmpty()?null:numeroIdentificacion);
+        clienteSospechoso=(clienteSospechoso.equals("null")||clienteSospechoso.isEmpty()?null:clienteSospechoso);
+        String fechaFinAjustada = null;
+        if (fechaFin.equals("null") || fechaFin.isEmpty()) {
+        	fechaFinAjustada = "3000-1-1";
+        } else {
+            String arrFechaString[] = fechaFin.split("-");
+            LocalDateTime dtTempDateTime = LocalDateTime.of(Integer.valueOf(arrFechaString[0]), 
+            											Integer.valueOf(arrFechaString[1]), 
+            											Integer.valueOf(arrFechaString[2]), 0, 0);
+            dtTempDateTime = dtTempDateTime.plusDays(1L);
+            
+            fechaFinAjustada = String.valueOf(dtTempDateTime.getYear())+"-"+String.valueOf(dtTempDateTime.getMonthValue())+"-"+String.valueOf(dtTempDateTime.getDayOfMonth());
+        }
+        
+        System.out.println("\n**********************************************************************");
+        System.out.println(fechaIni);
+        System.out.println(fechaFinAjustada);
+        System.out.println(pin);
+        System.out.println(numeroIdentificacion);
+        System.out.println(clienteSospechoso);
+        return ResponseEntity.ok(logUsoRepository.findWithCriteria(fechaIni, fechaFinAjustada, pin, numeroIdentificacion, clienteSospechoso));
+    }
+
+    /**
      * {@code GET  /log-usos/:id} : get the "id" logUso.
      *
      * @param id the id of the logUso to retrieve.
