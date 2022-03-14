@@ -13,6 +13,8 @@ import co.com.supergiros.rastreogiros.service.LogUsosService;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
 import co.com.supergiros.rastreogiros.service.UtilidadesService;
 import co.com.supergiros.rastreogiros.util.Constantes;
+import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -96,7 +98,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         
         log.debug("Creacion exitosa de usuario publico con username " + usuarioNuevo.getUsername());
-        logUsosService.registraEvento("Registro", "N");
+        logUsosService.registraEvento(usuarioPublicoDTO.getUsername(), usuarioPublicoDTO.getTipoDocumento().label
+        		, usuarioPublicoDTO.getNumeroDocumento(), "Registro", "N");
 
         return usuarioConverter.Entity2DTO(usuarioNuevo);
     }
@@ -110,9 +113,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findByUsername(username).get();
     }
     
+    // =================================================================================================
     @Override
     public Usuario findOneWithRolesByUsername (String username) {
     	return usuarioRepository.findOneWithRolesByUsername(username).get();
+    }
+    
+    // =================================================================================================
+    @Override
+    public Usuario findByTipoDocumentoAndNumeroDocumento(TipoDocumento tipoDocumento, String numeroDocumento) {
+
+    	return usuarioRepository.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento).get();
     }
 
     // =================================================================================================

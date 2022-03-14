@@ -218,4 +218,41 @@ public class PublicSecurityController {
         return new ResponseEntity<CodigosMensaje>(codigosEnviados, HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
+    @PostMapping("/existeusuario")
+    public ResponseEntity<Boolean> existeUsuario(@RequestBody UsuarioPublicoDTO usuarioPublicoDTO) {
+    	System.out.println("parametros recibidos:" + usuarioPublicoDTO);
+        // Verificar si existe por email y por telefono
+        String emaulUsuarioNuevo = usuarioPublicoDTO.getCorreo();
+        Usuario usuarioExiste = usuarioService.findByCorreo(emaulUsuarioNuevo);
+        try {
+            if (usuarioExiste != null) {
+            	logger.error("Se intenta registrar nuevo usuario, pero ya existe un usuario registrado con el correo " + emaulUsuarioNuevo);
+            	return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+            }
+
+            usuarioExiste = usuarioService.findByCelular(usuarioPublicoDTO.getCelular());
+            if (usuarioExiste != null) {
+                logger.error("Se intenta registrar nuevo usuario, pero ya existe un usuario registrado con celular " + usuarioPublicoDTO.getCelular());
+                return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+            }
+
+            usuarioExiste = usuarioService.findByTipoDocumentoAndNumeroDocumento(usuarioPublicoDTO.getTipoDocumento(), usuarioPublicoDTO.getNumeroDocumento());
+            if (usuarioExiste != null) {
+                logger.error ("Se intenta registrar nuevo usuario, pero ya existe un usuario registrado con ese documento :" 
+                					+ usuarioPublicoDTO.getTipoDocumento().label + " Nro:" + usuarioPublicoDTO.getNumeroDocumento());
+                return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Se intenta registrar nuevo usuario, pero NO es posible determinar si el usuario existe", e);
+        }
+
+        /* ???? DEJAR LOG ????
+        logUsosService.registraEvento(usuarioPublicoDTO.getUsername(), usuarioPublicoDTO.getTipoDocumento().label
+        		, usuarioPublicoDTO.getNumeroDocumento(), "Registro", "N");
+        */
+
+        return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+    }
+
 }

@@ -2,6 +2,8 @@ package co.com.supergiros.rastreogiros.repository;
 
 import co.com.supergiros.rastreogiros.entity.Rol;
 import co.com.supergiros.rastreogiros.entity.Usuario;
+import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
+
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,11 +23,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     public abstract Optional<Usuario> findByUsername(String username);
 
     @EntityGraph(attributePaths = "roles")
-    Optional<Usuario> findOneWithRolesByUsername(String username);
+    public abstract Optional<Usuario> findOneWithRolesByUsername(String username);
     
     @Query("select rol "
     		+ "from Rol rol "
     		+ "join Usuario usr"
     		+ " where  usr.username = :username  and rol.activo = 'S'")
     public Set<Rol> getRolesActivosPorUsername (@Param("username") String username);
+
+	public abstract Optional<Usuario> findByTipoDocumentoAndNumeroDocumento(TipoDocumento tiopDocuUsuario,
+			String numeroDocumento);
 }

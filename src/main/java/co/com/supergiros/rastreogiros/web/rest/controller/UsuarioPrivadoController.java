@@ -3,9 +3,6 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
-import liquibase.pro.packaged.iF;
-import net.bytebuddy.asm.Advice.Thrown;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
