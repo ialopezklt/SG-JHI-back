@@ -96,7 +96,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         
         log.debug("Creacion exitosa de usuario publico con username " + usuarioNuevo.getUsername());
-        logUsosService.registraEvento("Registro");
+        logUsosService.registraEvento("Registro", "N");
 
         return usuarioConverter.Entity2DTO(usuarioNuevo);
     }
@@ -127,7 +127,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setClave(encryptedPassword);
         usuario = usuarioRepository.save(usuario);
         
-        logUsosService.registraEvento("Recuperar contraseña");
+        logUsosService.registraEvento("Recuperar contraseña", "N");
         
         log.debug("Cambio de clave exitoso usuario " + usuario);
 

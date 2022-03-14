@@ -372,8 +372,7 @@
       <groupId>com.github.ulisesbocchio</groupId>
       <artifactId>jasypt-maven-plugin</artifactId>
       <version>3.0.4</version>
-    </plugin>        
-        
+    </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -1061,6 +1060,77 @@
             </properties>
         </profile>
         <profile>
+            <id>kltqa</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.testcontainers</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+						<plugin>
+							<artifactId>maven-antrun-plugin</artifactId>
+							<version>3.0.0</version>
+							<executions>
+								<execution>
+									<id>antrun-plugin-en-validate</id>
+									<phase>validate</phase>
+									<goals>
+										<goal>run</goal>
+									</goals>
+									<configuration>
+										<target>
+											<echo message="*****************************************************" level="warning" />
+											<echo message="***          MONTANDO PERFIL QA para KALETTRE      **" level="warning"  />
+											<echo message="*****************************************************"  level="warning" />
+											<echo message="Build dir: ${project.build.directory}" level="warning" />
+										</target>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>target/classes/static/</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-info</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+					  <configuration>
+					    <includeSystemScope>true</includeSystemScope>
+					  </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.github.git-commit-id</groupId>
+                        <artifactId>git-commit-id-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <!-- default Spring profiles -->
+                <spring.profiles.active>kltqa${profile.api-docs}${profile.tls}${profile.no-liquibase}</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
             <id>prod</id>
             <dependencies>
                 <dependency>
@@ -1075,6 +1145,27 @@
             </dependencies>
             <build>
                 <plugins>
+						<plugin>
+							<artifactId>maven-antrun-plugin</artifactId>
+							<version>3.0.0</version>
+							<executions>
+								<execution>
+									<id>antrun-plugin-en-validate</id>
+									<phase>validate</phase>
+									<goals>
+										<goal>run</goal>
+									</goals>
+									<configuration>
+										<target>
+											<echo message="*****************************************" level="warning" />
+											<echo message="***          MONTANDO PERFIL PRD      **" level="warning"  />
+											<echo message="*****************************************"  level="warning" />
+											<echo message="Build dir: ${project.build.directory}" level="warning" />
+										</target>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <configuration>

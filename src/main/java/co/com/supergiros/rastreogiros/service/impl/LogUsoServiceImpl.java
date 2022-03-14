@@ -37,7 +37,7 @@ public class LogUsoServiceImpl implements LogUsosService {
 		
 		LogUso evento = new LogUso();
 		
-		evento.setTipoDocumento(Constantes.TipoDocumento.valueOf(tipoDocumento));
+		evento.setTipoDocumento(Constantes.TipoDocumento.CC);
 		evento.setUsuario(username);
 		evento.setNumeroDocumento(numeroDocumento);
 		evento.setFechaHora(LocalDateTime.now());
