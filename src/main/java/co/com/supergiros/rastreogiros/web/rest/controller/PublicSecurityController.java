@@ -12,6 +12,7 @@ import co.com.supergiros.rastreogiros.service.UsuarioService;
 import co.com.supergiros.rastreogiros.service.UtilidadesService;
 import co.com.supergiros.rastreogiros.service.impl.UtilidadesServiceImpl;
 import co.com.supergiros.rastreogiros.util.Constantes;
+import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,16 +92,20 @@ public class PublicSecurityController {
      */
     @CrossOrigin(origins = "*")
     @GetMapping("/usuariorecuperarclave")
-    public ResponseEntity<UsuarioRecuperarClave> consultaUsuario(@RequestParam String usuario) {
-        Usuario usuarioC = usuarioService.findByUsername(usuario);
+    public ResponseEntity<UsuarioRecuperarClave> consultaUsuario(@RequestParam String tipoIdentificacion,
+    		@RequestParam String numeroIdentificacion) {
+    	
+    	TipoDocumento tdConvert = TipoDocumento.valueOf(tipoIdentificacion);
+    	System.out.println("tipo de documento a buscar:" + tdConvert);
+        Usuario usuarioC = usuarioService.findByTipoDocumentoAndNumeroDocumento(tdConvert, numeroIdentificacion);
         UsuarioRecuperarClave usuarioRecuperarClave = new UsuarioRecuperarClave();
         
         if (usuarioC != null) {
             try {
             	
-            	logUsosService.registraEvento(usuario
-            			, usuarioC.getTipoDocumento().label
-            			, usuarioC.getNumeroDocumento()
+            	logUsosService.registraEvento(tipoIdentificacion+"*"+numeroIdentificacion
+            			, tipoIdentificacion
+            			, numeroIdentificacion
             			, "Recuperar contraseña", "N");
                             	
                 CodigosMensaje codigosMensaje = utilidadesService.enviarMensajeRecuperarContrasena(
@@ -121,9 +126,9 @@ public class PublicSecurityController {
 
             return new ResponseEntity<UsuarioRecuperarClave>(usuarioRecuperarClave, HttpStatus.OK);
         } else {
-        	logUsosService.registraEvento(usuario
-        			, null
-        			, usuario
+        	logUsosService.registraEvento(tipoIdentificacion+"*"+numeroIdentificacion
+        			, tipoIdentificacion
+        			, numeroIdentificacion
         			, "Recuperar contraseña", "N");
                         	
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario no encontrado", null);
@@ -170,10 +175,6 @@ public class PublicSecurityController {
         } catch (UsuarioExisteException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario no creado por validaciones internas", e);
         }
-
-        logUsosService.registraEvento(usuarioPublicoDTO.getUsername(), usuarioPublicoDTO.getTipoDocumento().label
-        		, usuarioPublicoDTO.getNumeroDocumento(), "Registro", "N");
-        
 
         UsuarioPublicoDTO usuarioPublicoDTOCreado = usuarioService.crearUsuarioPublico(usuarioPublicoDTO);
 

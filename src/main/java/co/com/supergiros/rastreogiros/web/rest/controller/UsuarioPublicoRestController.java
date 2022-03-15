@@ -5,9 +5,15 @@ import co.com.supergiros.rastreogiros.DTO.UsuarioPublicoDTO;
 import co.com.supergiros.rastreogiros.DTO.UsuarioRecuperarClave;
 import co.com.supergiros.rastreogiros.converter.UsuarioConverter;
 import co.com.supergiros.rastreogiros.domain.Account;
+import co.com.supergiros.rastreogiros.entity.Rol;
 import co.com.supergiros.rastreogiros.entity.Usuario;
+import co.com.supergiros.rastreogiros.repository.RolRepository;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +38,10 @@ public class UsuarioPublicoRestController {
     
     @Autowired
     UsuarioRepository usuarioRepository;
+
+
+    @Autowired
+    RolRepository rolRepository;
 
     /*
      * Trae los datos del usuario logueado
@@ -69,7 +79,10 @@ public class UsuarioPublicoRestController {
         Usuario usuario = usuarioService.findOneWithRolesByUsername(currentPrincipalName);
         
         account.setActivated(usuario.getActivo());
-        account.setAuthorities(usuarioRepository.getRolesActivosPorUsername(currentPrincipalName));
+        Set<Rol> setRoles = new HashSet<Rol>();
+        List<Rol> lstRoles = rolRepository.getRolesActivosPorUsername(currentPrincipalName);
+        lstRoles.forEach((x) -> setRoles.add(x));
+        account.setAuthorities(setRoles);
         account.setEmail(usuario.getCorreo());
         account.setFirstName(usuario.getPrimerNombre());
         account.setLangKey("es");

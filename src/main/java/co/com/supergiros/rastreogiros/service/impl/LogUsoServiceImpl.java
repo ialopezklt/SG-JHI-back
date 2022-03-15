@@ -37,7 +37,7 @@ public class LogUsoServiceImpl implements LogUsosService {
 		
 		LogUso evento = new LogUso();
 		
-		evento.setTipoDocumento(Constantes.TipoDocumento.CC);
+		evento.setTipoDocumento((tipoDocumento==null?null: Constantes.TipoDocumento.valueOf(tipoDocumento)));
 		evento.setUsuario(username);
 		evento.setNumeroDocumento(numeroDocumento);
 		evento.setFechaHora(LocalDateTime.now());
@@ -45,7 +45,15 @@ public class LogUsoServiceImpl implements LogUsosService {
 		evento.setClienteSospechoso(sospechoso);
 		
 		logUsoRepository.save(evento);
-	
+    	
+    	if (nombreEvento.equals("Autenticar")) {
+    		Optional<Usuario> usuarioActualizadoUsuario = usuarioRepository.findByUsername(username);
+    		if (usuarioActualizadoUsuario.isPresent()) {
+    			Usuario usr = usuarioActualizadoUsuario.get();
+    			usr.setUltimoIngreso(Instant.now());
+    			usr = usuarioRepository.save(usr);
+    		}
+    	}
 	}
 
 		
@@ -74,7 +82,6 @@ public class LogUsoServiceImpl implements LogUsosService {
     	
     	// TODO. actualizar hora de ingreso
     	// usuarioActualizadoUsuario = usuarioRepository.save(usuarioActualizadoUsuario);
-    	
 
 		evento.setTipoDocumento(usuario.get().getTipoDocumento());
 		evento.setUsuario(usuario.get().getUsername());
@@ -87,7 +94,7 @@ public class LogUsoServiceImpl implements LogUsosService {
 	}
 	
 	@Override
-	public void registraConsultaPin(String pin) {
+	public void registraConsultaPin(String pin, String sospechoso) {
 		
 		LogUso evento = new LogUso();
 		
@@ -96,7 +103,7 @@ public class LogUsoServiceImpl implements LogUsosService {
     	Optional<Usuario> usuario = usuarioRepository.findByUsername(currentPrincipalName);
     	
     	if (!usuario.isPresent()) {
-    		logger.debug("No se pudo hacer log de usuario " + currentPrincipalName + ". No se encontró en la BD");
+    		logger.debug("No se pudo hacer log de usuario " + currentPrincipalName + ". No se encontro en la BD");
     		return;
     	}
     	
@@ -104,24 +111,12 @@ public class LogUsoServiceImpl implements LogUsosService {
 		evento.setUsuario(usuario.get().getUsername());
 		evento.setNumeroDocumento(usuario.get().getNumeroDocumento());
 		evento.setFechaHora(LocalDateTime.now());
-		evento.setOpcion("consulta estado");
+		evento.setOpcion("Consulta Estado");
+		evento.setClienteSospechoso(sospechoso);
 		evento.setPin(pin);
 		
 		logUsoRepository.save(evento);
 
 	}
 
-	@Override
-	public void registraIntentoLogin(String tipoDocumento, String numeroDocumento) {
-		LogUso evento = new LogUso();
-		
-		evento.setTipoDocumento(Constantes.TipoDocumento.valueOf(tipoDocumento));
-		evento.setUsuario(numeroDocumento);
-		evento.setNumeroDocumento(numeroDocumento);
-		evento.setFechaHora(LocalDateTime.now());
-		evento.setOpcion("Logueo");
-		
-		logUsoRepository.save(evento);
-		
-	}
 }

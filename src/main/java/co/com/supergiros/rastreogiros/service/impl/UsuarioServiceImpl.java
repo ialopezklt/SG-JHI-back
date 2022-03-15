@@ -17,6 +17,7 @@ import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.mail.internet.AddressException;
@@ -72,11 +73,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(usuarioPublicoDTO.getClave());
         Usuario usuarioNuevo = usuarioConverter.DTO2Entity(usuarioPublicoDTO);
-        usuarioNuevo.setUsername(usuarioPublicoDTO.getNumeroDocumento());
+        usuarioNuevo.setUsername(usuarioPublicoDTO.getTipoDocumento().label+"*"+ usuarioPublicoDTO.getNumeroDocumento());
         usuarioNuevo.setTipoUsuario(Constantes.TipoUsuario.Externo);
         usuarioNuevo.setActivo(true);
         usuarioNuevo.setClave(encryptedPassword);
         usuarioNuevo.setFechaCreacion(LocalDateTime.now());
+        usuarioNuevo.setCreadoPor("Autoregistro");
         usuarioNuevo = usuarioRepository.save(usuarioNuevo);
         if (usuarioNuevo == null) {
         	throw new RuntimeException("No se pudo crear el usuario");
@@ -98,7 +100,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         
         log.debug("Creacion exitosa de usuario publico con username " + usuarioNuevo.getUsername());
-        logUsosService.registraEvento(usuarioPublicoDTO.getUsername(), usuarioPublicoDTO.getTipoDocumento().label
+        logUsosService.registraEvento(usuarioPublicoDTO.getNumeroDocumento(), usuarioPublicoDTO.getTipoDocumento().label
         		, usuarioPublicoDTO.getNumeroDocumento(), "Registro", "N");
 
         return usuarioConverter.Entity2DTO(usuarioNuevo);
@@ -123,7 +125,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario findByTipoDocumentoAndNumeroDocumento(TipoDocumento tipoDocumento, String numeroDocumento) {
 
-    	return usuarioRepository.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento).get();
+    	Optional<Usuario> usuarioBuscado = usuarioRepository.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento);
+    	if (usuarioBuscado.isPresent()) {
+    		return usuarioBuscado.get();
+    	} else {
+    		return null;
+    	}
     }
 
     // =================================================================================================

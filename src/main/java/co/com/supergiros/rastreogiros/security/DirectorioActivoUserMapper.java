@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,7 @@ import org.springframework.security.ldap.userdetails.LdapUserDetailsMapper;
 import org.springframework.stereotype.Component;
 
 import co.com.supergiros.rastreogiros.entity.Usuario;
+import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.service.UsuarioService;
 
 @Component
@@ -26,10 +28,13 @@ public class DirectorioActivoUserMapper extends LdapUserDetailsMapper{
 
 	UsuarioService usuarioService;
 	
+	UsuarioRepository usuarioRepository;
+	
 	public DirectorioActivoUserMapper (
-			UsuarioService usuarioService) {
+			UsuarioService usuarioService,
+			UsuarioRepository usuarioRepository) {
 		this.usuarioService = usuarioService;
-		
+		this.usuarioRepository = usuarioRepository;
 	}
 	
     @Override
@@ -57,7 +62,11 @@ public class DirectorioActivoUserMapper extends LdapUserDetailsMapper{
     	if (rolesAsignados.isEmpty()) {
     		rolesAsignados.add(new SimpleGrantedAuthority("SIN_ACCESO"));
     	}
-    	System.out.println("rolesAsignados:" + rolesAsignados);
+    	
+    	Usuario usuarioLocal = usuarioService.findByUsername(username);
+    	usuarioLocal.setUltimoIngreso(Instant.now());
+    	usuarioRepository.save(usuarioLocal);
+
     	return super.mapUserFromContext(ctx, username, rolesAsignados);
     	
     }

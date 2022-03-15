@@ -40,14 +40,41 @@ public class UserJWTController {
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody AuthRequest loginVM) {
     	
-    	logUsosService.registraEvento("Logueo", "N");
-        
     	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            loginVM.getUsername(),
+    		loginVM.getUsername(),
             loginVM.getPassword()
         );
 
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
+        boolean rememberMe = false;
+        String jwt = tokenProvider.createToken(authentication, rememberMe);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+    }
+
+    @PostMapping("/authenticatepub")
+    public ResponseEntity<JWTToken> authorizePub(@Valid @RequestBody AuthRequest loginVM) {
+    	
+    	String usernameConvertido = loginVM.getTipoDocumento()+"*"+loginVM.getUsername();
+    	String usernameOriginal = loginVM.getUsername();
+    	logUsosService.registraEvento(usernameConvertido, loginVM.getTipoDocumento(), loginVM.getUsername(), "Logueo", "N");
+
+    	loginVM.setUsername(usernameConvertido);
+        
+    	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+    		loginVM.getUsername(),
+            loginVM.getPassword()
+        );
+
+        Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        
+        // Si llega a la siguiente linea fue porque logro autenticar.
+        logUsosService.registraEvento(usernameConvertido, loginVM.getTipoDocumento(), usernameOriginal, "Autenticar", "N");
+        
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
         boolean rememberMe = false;

@@ -30,6 +30,7 @@ public class ConsultaGiroServiceImpl implements ConsultaGiroService {
         RestTemplate restTemplate = new RestTemplate();
 
         String urlSims = parametroRepository.findById(Constantes.ID_PAR_URL_SIMS).get().getValor();
+        int maxConsultasFallidas = Integer.valueOf(parametroRepository.findById(Constantes.ID_PAR_MAX_FALLIDAS).get().getValor());
 
         ParametrosConsultaGiro parametrosConsultaGiro = new ParametrosConsultaGiro();
         parametrosConsultaGiro.setNumeroDocumentoCliente(numeroDocumento);
@@ -40,13 +41,22 @@ public class ConsultaGiroServiceImpl implements ConsultaGiroService {
 
             respuesta = restTemplate.postForObject(urlSims, parametrosConsultaGiro, RespuestaConsultaGiro.class);
             
-            logUsoService.registraEvento(numeroDocumento, tipoDocumento, numeroDocumento, "Consulta Estado", "N");
+            if (respuesta.getEstado().equals("error")) {
+            	Constantes.contadorConsultasPinFallidas += 1;
+            } else {
+            	Constantes.contadorConsultasPinFallidas = 0;
+            }
+            String sospechoso = (Constantes.contadorConsultasPinFallidas>= maxConsultasFallidas ?"S":"N");
+        	logUsoService.registraConsultaPin(pin, sospechoso);
             
         } catch (NumberFormatException e) {
         	respuesta = new RespuestaConsultaGiro();
         	respuesta.setEstado("error");
         	respuesta.setMensaje("Por favor valida los datos ingresados. Número de PIN no es válido");
         	respuesta.setPin(0L);
+        	Constantes.contadorConsultasPinFallidas += 1;
+        	String sospechoso = (Constantes.contadorConsultasPinFallidas>= maxConsultasFallidas ?"S":"N");
+        	logUsoService.registraConsultaPin(pin, sospechoso);
 		}
         
         if (respuesta.getEstado().equals("error")) {

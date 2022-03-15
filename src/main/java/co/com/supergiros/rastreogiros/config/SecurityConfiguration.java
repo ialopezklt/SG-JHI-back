@@ -135,7 +135,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
-            .antMatchers("/api/publico/**", "/api/authenticate").permitAll()
+            .antMatchers("/api/publico/**", "/api/authenticate", "/api/authenticatepub").permitAll()
             .antMatchers("/api/consultagiro/**", "/api/usuario/**").authenticated()
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN_TI)
             .antMatchers("/api/**").authenticated()

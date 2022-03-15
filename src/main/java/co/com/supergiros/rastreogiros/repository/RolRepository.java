@@ -24,4 +24,13 @@ public interface RolRepository extends JpaRepository<Rol, Long> {
 	@EntityGraph(attributePaths = "usuariosPorRol")
     @Query("select roles from Rol roles where rolId = :rolid")
 	Optional<Rol> findByIdWithUsuarios(@Param(value="rolid") Long rolId);
+	
+    @EntityGraph(attributePaths = "usuariosPorRol")
+    @Query("select rol "
+    		+ "from Rol rol "
+    		+ "join rol.usuariosPorRol usr "
+    		+ " where  usr.username = :username  and rol.activo = 'S'")
+    public List<Rol> getRolesActivosPorUsername (@Param("username") String username);
+
+
 }
