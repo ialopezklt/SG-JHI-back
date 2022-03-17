@@ -12,7 +12,7 @@
     <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
     <property name="uuidType" value="uuid" dbms="h2, postgresql"/>
     <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
-    <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
+    <property name="datetimeType" value="timestampz" dbms="oracle, mssql, postgresql, h2"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220204071008_added_entity_GrupoParametro.xml" relativeToChangelogFile="false"/>
@@ -25,4 +25,5 @@
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20220315071308_added_entity_PuntoAtencion.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

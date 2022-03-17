@@ -1,7 +1,7 @@
-  ${AnsiColor.BRIGHT_BLUE}  _  __  ${AnsiColor.BLACK}             _                _        _                       
-  ${AnsiColor.BRIGHT_BLUE} | |/ /  ${AnsiColor.BLACK}  __ _      | |      ___     | |_     | |_       _ _     ___   
-  ${AnsiColor.BRIGHT_BLUE} | ' <   ${AnsiColor.BLACK} / _` |     | |     / -_)    |  _|    |  _|     | '_|   / -_)  
-  ${AnsiColor.BRIGHT_BLUE} |_|\_\  ${AnsiColor.BLACK} \__,_|    _|_|_    \___|    _\__|    _\__|    _|_|_    \___|  
+  ${AnsiColor.BRIGHT_BLUE}  _  __  ${AnsiColor.DEFAULT}             _                _        _                       
+  ${AnsiColor.BRIGHT_BLUE} | |/ /  ${AnsiColor.DEFAULT}  __ _      | |      ___     | |_     | |_       _ _     ___   
+  ${AnsiColor.BRIGHT_BLUE} | ' <   ${AnsiColor.DEFAULT} / _` |     | |     / -_)    |  _|    |  _|     | '_|   / -_)  
+  ${AnsiColor.BRIGHT_BLUE} |_|\_\  ${AnsiColor.DEFAULT} \__,_|    _|_|_    \___|    _\__|    _\__|    _|_|_    \___|  
   ${AnsiColor.DEFAULT}_|"""""| _|"""""| _|"""""| _|"""""| _|"""""| _|"""""| _|"""""| _|"""""| 
   ${AnsiColor.DEFAULT}"`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' "`-0-0-' 
 

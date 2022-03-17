@@ -73,7 +73,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         String encryptedPassword = passwordEncryptor.encryptPassword(usuarioPublicoDTO.getClave());
         Usuario usuarioNuevo = usuarioConverter.DTO2Entity(usuarioPublicoDTO);
-        usuarioNuevo.setUsername(usuarioPublicoDTO.getTipoDocumento().label+"*"+ usuarioPublicoDTO.getNumeroDocumento());
+        usuarioNuevo.setUsername(usuarioPublicoDTO.getTipoDocumento().name()+"*"+ usuarioPublicoDTO.getNumeroDocumento());
         usuarioNuevo.setTipoUsuario(Constantes.TipoUsuario.Externo);
         usuarioNuevo.setActivo(true);
         usuarioNuevo.setClave(encryptedPassword);
