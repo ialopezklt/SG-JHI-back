@@ -17,6 +17,7 @@ import co.com.supergiros.rastreogiros.repository.LogUsoRepository;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.service.LogUsosService;
 import co.com.supergiros.rastreogiros.util.Constantes;
+import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
 
 @Service
 public class LogUsoServiceImpl implements LogUsosService {
@@ -37,7 +38,15 @@ public class LogUsoServiceImpl implements LogUsosService {
 		
 		LogUso evento = new LogUso();
 		
-		evento.setTipoDocumento((tipoDocumento==null?null: Constantes.TipoDocumento.valueOf(tipoDocumento)));
+		
+		System.out.println("\n******************************************\nDocumento recibido para evento " + nombreEvento + " es " + tipoDocumento);
+		System.out.println("Tipo documento entonces es: " + Constantes.TipoDocumento.valueOfLabel(tipoDocumento));
+		System.out.println("Tipo documento entonces es: " + Constantes.TipoDocumento.valueOf(tipoDocumento));
+		
+		TipoDocumento td = (nombreEvento=="Autenticar" || nombreEvento=="Logueo" || nombreEvento=="Registro" ?TipoDocumento.valueOf(tipoDocumento): TipoDocumento.valueOfLabel(tipoDocumento));
+		
+		// valueOfLabel para registro
+		evento.setTipoDocumento((tipoDocumento==null?null:td));
 		evento.setUsuario(username);
 		evento.setNumeroDocumento(numeroDocumento);
 		evento.setFechaHora(LocalDateTime.now());

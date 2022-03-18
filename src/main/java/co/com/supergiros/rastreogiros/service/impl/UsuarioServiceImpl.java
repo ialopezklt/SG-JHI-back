@@ -100,7 +100,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         
         log.debug("Creacion exitosa de usuario publico con username " + usuarioNuevo.getUsername());
-        logUsosService.registraEvento(usuarioPublicoDTO.getNumeroDocumento(), usuarioPublicoDTO.getTipoDocumento().label
+        logUsosService.registraEvento(usuarioNuevo.getUsername(), usuarioPublicoDTO.getTipoDocumento().name()
         		, usuarioPublicoDTO.getNumeroDocumento(), "Registro", "N");
 
         return usuarioConverter.Entity2DTO(usuarioNuevo);
