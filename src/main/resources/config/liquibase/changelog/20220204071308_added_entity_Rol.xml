@@ -53,7 +53,8 @@
                   file="config/liquibase/fake-data/rol.csv"
                   separator=";"
                   tableName="rol"
-                  usePreparedStatements="true">
+                  usePreparedStatements="true"
+				  encoding="Windows-1252">
             <column name="rol_id" type="numeric"/>
             <column name="nombre" type="string"/>
             <column name="activo" type="string"/>

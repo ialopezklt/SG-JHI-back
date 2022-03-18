@@ -45,7 +45,7 @@ public class Usuario implements Serializable {
     // Aplica solo para usuario internos, es el SAMAccountName, para los externos se asgina el nro identificacion
     private String username;
 
-    @NotNull(message = "LA clave no debe ser nulo y minimo 5 chars")
+    @NotNull(message = "La clave no debe ser nulo y minimo 5 chars")
     @Size(min = 5)
     @Column(name = "clave", nullable = false)
     // Aplica solo para usuario externos, para los internos se genera cadena aleatoria
@@ -70,16 +70,16 @@ public class Usuario implements Serializable {
     @Column(name = "numero_documento", nullable = false)
     private String numeroDocumento;
 
-    @NotNull(message = "El primer nombre no debe ser nulo y minimo 3 chars")
-    @Size(min = 3, max = 256, message = "El nombre tener almenos 3 caracteres")
+    @NotNull(message = "El primer nombre no debe ser nulo y minimo 2 chars")
+    @Size(min = 2, max = 256, message = "El nombre tener almenos 2 caracteres")
     @Column(name = "primer_nombre", nullable = false)
     private String primerNombre;
 
     @Column(name = "segundo_nombre")
     private String segundoNombre;
 
-    @NotNull(message = "El primer apellido no debe ser nulo y minimo 3 chars")
-    @Size(min = 3, max = 256, message = "El apellido tener almenos 3 caracteres")
+    @NotNull(message = "El primer apellido no debe ser nulo y minimo 2 chars")
+    @Size(min = 2, max = 256, message = "El apellido tener almenos 2 caracteres")
     @Column(name = "primer_apellido", nullable = false)
     private String primerApellido;
 

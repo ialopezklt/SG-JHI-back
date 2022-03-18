@@ -39,7 +39,8 @@
                   file="config/liquibase/fake-data/grupo_parametro.csv"
                   separator=";"
                   tableName="grupo_parametro"
-                  usePreparedStatements="true">
+                  usePreparedStatements="true"
+				  encoding="Windows-1252">
             <column name="grupo_parametro_id" type="numeric"/>
             <column name="nombre" type="string"/>
             <column name="activo" type="string"/>
