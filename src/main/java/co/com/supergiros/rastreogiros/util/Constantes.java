@@ -111,10 +111,6 @@ public class Constantes {
 
     // constantes SMS
     public static final Long ID_SMS_URLSISTEMA_EXTERNO = 17L;
-    public static final Long ID_SMS_PLANTILLA_SOLI_REGISTRO = 27L;
-    public static final Long ID_SMS_PLANTILLA_REGISTRO_EXITO = 30L;
-    public static final Long ID_SMS_PLANTILLA_RECUPE_CLAVE = 33L;
-    public static final Long ID_SMS_PLANTILLA_ACTU_EXITO = 33L;
     public static final Long ID_SMS_ID_COLABORADOR = 19L;
     public static final Long ID_SMS_ID_AGENCIA = 20L;
     public static final Long ID_SMS_ID_SISTEMA_ORIGEN = 21L;
@@ -123,13 +119,17 @@ public class Constantes {
     public static final Long ID_SMS_PASSWORD_SMS = 24L;
     public static final Long ID_PAR_ASUNTO_EMAIL_PREREGISTRO = 25L;
     public static final Long ID_PAR_EMAIL_PREREGISTRO = 26L;
-    public static final Long ID_PAR_BASE_IMAGENES = 36L;
+    public static final Long ID_SMS_PLANTILLA_SOLI_REGISTRO = 27L;
     public static final Long ID_PAR_ASUNTO_EMAIL_REGISTRO_EXITO = 28L;
     public static final Long ID_PAR_EMAIL_REGISTRO_EXITO = 29L;
-    public static final Long ID_PAR_ASUNTO_EMAIL_ACTUALIZ_EXITO = 42L;
-    public static final Long ID_PAR_EMAIL_ACTUALIZ_EXITO = 43L;
+    public static final Long ID_SMS_PLANTILLA_REGISTRO_EXITO = 30L;
     public static final Long ID_PAR_ASUNTO_RECUPE_CONTRA = 31L;
     public static final Long ID_PAR_EMAIL_RECUPE_CONTRA = 32L;
+    public static final Long ID_SMS_PLANTILLA_RECUPE_CLAVE = 33L;
+    public static final Long ID_PAR_BASE_IMAGENES = 36L;
+    public static final Long ID_PAR_ASUNTO_EMAIL_ACTUALIZ_EXITO = 42L;
+    public static final Long ID_PAR_EMAIL_ACTUALIZ_EXITO = 43L;
+    public static final Long ID_SMS_PLANTILLA_ACTU_EXITO = 44L;
     
     // constantes LDAP
     public static final Long ID_PAR_URL_LDAP = 45L;
