@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.websocket.server.PathParam;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -228,7 +226,7 @@ public class PuntoAtencionRestController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of puntoAtencions in body.
      */
     @GetMapping("/punto-atencion/departamento/{nombreDepartamento}")
-    public ResponseEntity<List<PuntoAtencion>> getPuntosPorDepartamentoPuntoAtencions(@PathParam(value = "nombreDepartamento") String nombreDepartamento) {
+    public ResponseEntity<List<PuntoAtencion>> getPuntosPorDepartamentoPuntoAtencions(@PathVariable(value = "nombreDepartamento") String nombreDepartamento) {
         log.debug("REST request to getPuntosPorDepartamentoPuntoAtencions");
         
         return ResponseEntity.ok(puntoAtencionRepository.findByDepartamento(nombreDepartamento));
@@ -240,8 +238,9 @@ public class PuntoAtencionRestController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of puntoAtencions in body.
      */
     @GetMapping("/punto-atencion/departamento/{nombreDepartamento}/ciudad")
-    public List<String> getCiudadesPorDepartamentoPuntoAtencions(@PathParam(value = "nombreDepartamento") String nombreDepartamento) {
+    public List<String> getCiudadesPorDepartamentoPuntoAtencions(@PathVariable(value = "nombreDepartamento") String nombreDepartamento) {
         log.debug("REST request to getCiudadesPorDepartamentoPuntoAtencions");
+        System.out.println("\n********************************\ndepartamento recibodo:" + nombreDepartamento);
         
         return puntoAtencionRepository.findAllCiudadesPorDepartamentos(nombreDepartamento);
     }
@@ -253,8 +252,8 @@ public class PuntoAtencionRestController {
      */
     @GetMapping("/punto-atencion/departamento/{nombreDepartamento}/ciudad/{nombreCiudad}")
     public ResponseEntity<List<PuntoAtencion>> getPuntosPorDepartamentoYCiudad(
-    		  @PathParam(value = "nombreDepartamento") String nombreDepartamento
-    		, @PathParam(value = "nombreCiudad") String nombreCiudad) {
+    		@PathVariable(value = "nombreDepartamento") String nombreDepartamento
+    		, @PathVariable(value = "nombreCiudad") String nombreCiudad) {
         log.debug("REST request to getPuntosPorDepartamentoYCiudad");
         
         return ResponseEntity.ok(puntoAtencionRepository.findByDepartamentoAndCiudad(nombreDepartamento, nombreCiudad));

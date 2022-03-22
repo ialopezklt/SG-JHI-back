@@ -15,10 +15,10 @@ public interface PuntoAtencionRepository extends JpaRepository<PuntoAtencion, Lo
 	public abstract List<PuntoAtencion> findByCiudad(String ciudad);
 	public abstract List<PuntoAtencion> findByDepartamentoAndCiudad(String departamento, String ciudad);
 	
-	@Query("select distinct departamento from PuntoAtencion")
+	@Query("select distinct departamento from PuntoAtencion order by departamento")
 	public List<String> findAllDepartamentos();
 
-	@Query("select distinct ciudad from PuntoAtencion where departamento = :departamento")
+	@Query("select distinct ciudad from PuntoAtencion where departamento = :departamento order by ciudad")
 	public List<String> findAllCiudadesPorDepartamentos(@Param(value = "departamento") String departamento);
 	
 }
