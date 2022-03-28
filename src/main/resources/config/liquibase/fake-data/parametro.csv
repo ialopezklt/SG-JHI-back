@@ -6,8 +6,8 @@ parametro_id;valor;descripcion;cifrado;grupo_parametro_id
 5;5432;db port                                                 ;false;2
 6;gestiondeservicios@supergiros.com.co;email user                                              ;false;5
 7;Giros.2022;email pass                                              ;false;5
-8;smtp.office365.com;email server                                            ;false;5
-9;587;email port                                              ;false;5
+8;supergirossa.mail.protection.outlook.com;email server                                            ;false;5
+9;25;email port                                              ;false;5
 10;smtp;email protocol                                          ;false;5
 11;false;ssl enable                                              ;false;5
 12;true;start tls                                               ;false;5

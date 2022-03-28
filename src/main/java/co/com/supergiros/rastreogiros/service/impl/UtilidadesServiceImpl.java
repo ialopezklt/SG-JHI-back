@@ -72,6 +72,7 @@ public class UtilidadesServiceImpl implements UtilidadesService {
         String emailProtocol = parametroService.findById(Constantes.ID_EMAIL_PROTOCOL).getValor();
 
         try {
+        	System.out.println("\n**************************\nMensaje correo:" + content.toString());
             htmlPart.setContent(content.toString(), "text/html;charset=utf-8");
             mp.addBodyPart(htmlPart);
             props.setProperty("mail.smtp.host", host);
@@ -127,6 +128,8 @@ public class UtilidadesServiceImpl implements UtilidadesService {
         String usuarioSms = parametroRepository.findById(Constantes.ID_SMS_USUARIO_SMS).get().getValor().trim();
         String passwordSms = parametroRepository.findById(Constantes.ID_SMS_PASSWORD_SMS).get().getValor().trim();
         String urlSistemaExterno = parametroRepository.findById(Constantes.ID_SMS_URLSISTEMA_EXTERNO).get().getValor().trim();
+        
+        System.out.println("\n*********************\nSMS Token:" + token);
         
         plantillaMensaje = plantillaMensaje.trim();
 

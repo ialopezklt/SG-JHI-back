@@ -3,6 +3,7 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,8 +29,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import co.com.supergiros.rastreogiros.DTO.LogUsoDTO;
 import co.com.supergiros.rastreogiros.entity.LogUso;
+import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.LogUsoRepository;
+import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.util.Constantes;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
@@ -49,9 +53,13 @@ public class LogUsoController {
     private String applicationName = "BackRastreo->LogUsoController";
 
     private final LogUsoRepository logUsoRepository;
+    
+    private final UsuarioRepository usuarioRepository;
 
-    public LogUsoController(LogUsoRepository logUsoRepository) {
+    public LogUsoController(LogUsoRepository logUsoRepository,
+    		UsuarioRepository usuarioRepository) {
         this.logUsoRepository = logUsoRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     /**
@@ -201,7 +209,7 @@ public class LogUsoController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of logUsos in body.
      */
     @GetMapping("/log-usos/criteria")
-    public ResponseEntity<List<LogUso>> getLogUsosConCriterios( 
+    public ResponseEntity<List<LogUsoDTO>> getLogUsosConCriterios( 
     		@RequestParam String fechaIni,
     		@RequestParam String fechaFin,
     		@RequestParam String pin,
@@ -227,13 +235,35 @@ public class LogUsoController {
             fechaFinAjustada = String.valueOf(dtTempDateTime.getYear())+"-"+String.valueOf(dtTempDateTime.getMonthValue())+"-"+String.valueOf(dtTempDateTime.getDayOfMonth());
         }
         
-        System.out.println("\n**********************************************************************");
         System.out.println(fechaIni);
         System.out.println(fechaFinAjustada);
         System.out.println(pin);
         System.out.println(numeroIdentificacion);
         System.out.println(clienteSospechoso);
-        return ResponseEntity.ok(logUsoRepository.findWithCriteria(fechaIni, fechaFinAjustada, pin, numeroIdentificacion, clienteSospechoso));
+        List<LogUso> listaBruta = logUsoRepository.findWithCriteria(fechaIni, fechaFinAjustada, pin, numeroIdentificacion, clienteSospechoso);
+        
+        List<LogUsoDTO> listaResp = new ArrayList<LogUsoDTO>();
+        listaBruta.forEach((logu) -> { 
+        	LogUsoDTO resp = new LogUsoDTO();
+        	resp.setClienteSospechoso(logu.getClienteSospechoso());
+        	resp.setDatosAnteriores(logu.getDatosAnteriores());
+        	resp.setFechaHora(logu.getFechaHora());
+        	resp.setLogUsoId(logu.getLogUsoId());
+        	resp.setNumeroDocumento(logu.getNumeroDocumento());
+        	resp.setOpcion(logu.getOpcion());
+        	resp.setPin(logu.getPin());
+        	resp.setTipoDocumento(logu.getTipoDocumento());
+        	resp.setUsuario(logu.getUsuario());
+        	Optional<Usuario> usuLog = usuarioRepository.findByTipoDocumentoAndNumeroDocumento(logu.getTipoDocumento(), logu.getNumeroDocumento());
+        	if (usuLog.isPresent()) {
+        		resp.setNombreCompleto(usuLog.get().getPrimerNombre() + " " + usuLog.get().getSegundoNombre() + " " +
+        								usuLog.get().getPrimerApellido()+ " " + usuLog.get().getSegundoApellido());
+        	} else {
+        		resp.setNombreCompleto("No encontrado");
+        	}
+        	listaResp.add(resp);
+        });
+        return ResponseEntity.ok(listaResp);
     }
 
     /**

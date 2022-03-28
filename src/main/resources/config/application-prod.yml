@@ -15,9 +15,9 @@
 
 logging:
   level:
-    ROOT: INFO
-    tech.jhipster: INFO
-    co.com.supergiros.rastreogiros: INFO
+    ROOT: DEBUG
+    tech.jhipster: DEBUG
+    co.com.supergiros.rastreogiros: DEBUG
 
 eureka:
   instance:
