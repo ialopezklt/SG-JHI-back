@@ -25,9 +25,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import co.com.supergiros.rastreogiros.entity.GrupoParametros;
 import co.com.supergiros.rastreogiros.repository.GrupoParametroRepository;
+import co.com.supergiros.rastreogiros.util.HeadersUtil;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
-import tech.jhipster.web.util.HeaderUtil;
-
 /**
  * REST controller for managing {@link co.com.supergiros.rastreogiros.domain.GrupoParametro}.
  */
@@ -67,7 +66,7 @@ public class GrupoParametroController {
         
         return ResponseEntity.created(new URI("/api/grupo-parametros/" + grupoCreado.getGrupoParametroId()))
 				.headers(
-					    HeaderUtil.createEntityCreationAlert(
+					    HeadersUtil.createEntityCreationAlert(
 					        applicationName,
 					        false,
 					        ENTITY_NAME,
@@ -108,7 +107,7 @@ public class GrupoParametroController {
         return ResponseEntity
                     .ok()
                     .headers(
-                        HeaderUtil.createEntityUpdateAlert(
+                        HeadersUtil.createEntityUpdateAlert(
                             applicationName,
                             false,
                             ENTITY_NAME,
@@ -159,7 +158,7 @@ public class GrupoParametroController {
         return ResponseEntity
                     .ok()
                     .headers(
-                        HeaderUtil.createEntityUpdateAlert(
+                        HeadersUtil.createEntityUpdateAlert(
                             applicationName,
                             false,
                             ENTITY_NAME,
@@ -213,7 +212,7 @@ public class GrupoParametroController {
         
         return ResponseEntity
                     .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+                    .headers(HeadersUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
                     .build();
     }
 }

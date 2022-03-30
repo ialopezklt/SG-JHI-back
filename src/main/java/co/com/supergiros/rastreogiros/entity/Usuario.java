@@ -123,6 +123,18 @@ public class Usuario implements Serializable {
     	return this;
     }
     
+    public Usuario deleteRol(Rol rol) {
+    	Set<Rol> listaRolesUsuario = this.getRoles();
+    	if (listaRolesUsuario == null) {
+    		listaRolesUsuario = new HashSet<Rol>();
+    	} else {
+    		listaRolesUsuario.remove(rol);
+    	}
+    	
+    	this.setRoles(listaRolesUsuario);
+    	return this;
+    }
+    
     @Override
     public String toString() {
         return "{'username': '" + username + "', 'numeroDocumento':'" + numeroDocumento + "', 'tipoDocumento':'" + tipoDocumento + "'}";

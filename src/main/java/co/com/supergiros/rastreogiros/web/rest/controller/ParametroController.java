@@ -4,6 +4,7 @@ import co.com.supergiros.rastreogiros.entity.GrupoParametros;
 import co.com.supergiros.rastreogiros.entity.Parametro;
 import co.com.supergiros.rastreogiros.repository.GrupoParametroRepository;
 import co.com.supergiros.rastreogiros.repository.ParametroRepository;
+import co.com.supergiros.rastreogiros.util.HeadersUtil;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import tech.jhipster.web.util.HeaderUtil;
 
 /**
  * REST controller for managing {@link co.com.supergiros.rastreogiros.domain.Parametro}.
@@ -60,7 +60,7 @@ public class ParametroController {
         return ResponseEntity
             .created(new URI("/api/parametros/" + parametroNuevo.getParametroId()))
             .headers(
-                HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, parametroNuevo.getParametroId().toString())
+                HeadersUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, parametroNuevo.getParametroId().toString())
             )
             .body(parametroNuevo);
     }
@@ -101,7 +101,7 @@ public class ParametroController {
         return ResponseEntity
                             .ok()
                             .headers(
-                                HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, parametroActualizado.getParametroId().toString())
+                                HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, parametroActualizado.getParametroId().toString())
                             )
                             .body(parametroActualizado);
     }
@@ -150,7 +150,7 @@ public class ParametroController {
             return ResponseEntity
                     .ok()
                     .headers(
-                        HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, parametroActualizado.getParametroId().toString())
+                        HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, parametroActualizado.getParametroId().toString())
                     )
                     .body(parametroActualizado);
         }
@@ -209,7 +209,7 @@ public class ParametroController {
         parametroRepository.deleteById(id);
         return ResponseEntity
                     .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+                    .headers(HeadersUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
                     .build();
     }
 

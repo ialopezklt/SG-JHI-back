@@ -1,14 +1,19 @@
 package co.com.supergiros.rastreogiros.web.rest.controller;
 
 import co.com.supergiros.rastreogiros.entity.Rol;
+import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.RolRepository;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
+import co.com.supergiros.rastreogiros.util.HeadersUtil;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -19,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import tech.jhipster.web.util.HeaderUtil;
 
 /**
  * REST controller for managing {@link co.com.supergiros.rastreogiros.entity.Rol}.
@@ -57,11 +61,20 @@ public class RolController {
         if (rol.getRolId() != null) {
             throw new BadRequestAlertException("A new rol cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Set<Usuario> usuariosEnRol = rol.getUsuariosPorRol();
+        rol.setUsuariosPorRol(null);
+
         Rol result = rolRepository.save(rol);
+        
+        
+        usuariosEnRol.forEach((usr)->{
+        	usr = usr.addRol(result); 
+        	usuarioRepository.save(usr);
+        });
 
         return ResponseEntity
             .created(new URI("/api/rols/" + result.getRolId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getRolId().toString()))
+            .headers(HeadersUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getRolId().toString()))
             .body(result);
 
     }
@@ -89,18 +102,35 @@ public class RolController {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!rolRepository.existsById(rolId)) {
-            throw (new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+        Optional<Rol> optRolAntesActualizacion = rolRepository.findByIdWithUsuarios(rolRecibido.getRolId());
+        if (!optRolAntesActualizacion.isPresent()) {
+            throw (new BadRequestAlertException("Valor no encontrado ", ENTITY_NAME, "idnotfound"));
         }
-        System.out.println("\n****************************\nrol recibido:" + rolRecibido);
+        log.debug("\n****************************\nrol recibido:" + rolRecibido);
 
         Rol nuevoRol =  rolRepository.save(rolRecibido);
-        System.out.println("\n****************************\nrol grabado:" + nuevoRol);
-        rolRecibido.getUsuariosPorRol().forEach((usr)->{ 
-        	System.out.println("\n*****************roles del usuario antes:" + usr.getRoles());
+
+        // se identifican los usuarios eliminados del rol
+        
+		Set<Usuario> listaNuevaUsuariosEnRol = rolRecibido.getUsuariosPorRol();
+		
+		Rol rolAntesActualizacion = optRolAntesActualizacion.get();
+			
+		rolAntesActualizacion.getUsuariosPorRol().forEach((usr)->{
+        	if (!listaNuevaUsuariosEnRol.contains(usr)) {
+        		Usuario usua = usuarioRepository.findOneWithRolesByUsername(usr.getUsername()).get();
+        		log.debug("Se elimina a " + usr.getUsername() + " del rol " + rolRecibido.getNombre());
+        		Set<Rol> rolesUsua = usua.getRoles();
+        		rolesUsua.remove(rolAntesActualizacion);
+        		usua.setRoles(rolesUsua);
+        		usuarioRepository.save(usua);
+        	}
+        }); 
+        
+        rolRecibido.getUsuariosPorRol().forEach((usr)->{
         	usr = usr.addRol(nuevoRol); 
-        	System.out.println("\n********************roles del usuario despues:" + usr.getRoles());
-        	usuarioRepository.save(usr);});
+        	usuarioRepository.save(usr);
+        });
         
         if (nuevoRol==null) {
         	throw (new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -108,7 +138,7 @@ public class RolController {
         
         return ResponseEntity
                     .ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, nuevoRol.getRolId().toString()))
+                    .headers(HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, nuevoRol.getRolId().toString()))
                     .body(nuevoRol);
 
     }
@@ -158,7 +188,7 @@ public class RolController {
         }
         
         return ResponseEntity.ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, rolActualizado.getRolId().toString()))
+                            .headers(HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, rolActualizado.getRolId().toString()))
                             .body(rolActualizado);
     }
 
@@ -204,7 +234,7 @@ public class RolController {
         
         return ResponseEntity
                     .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+                    .headers(HeadersUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
                     .build();
     }
 

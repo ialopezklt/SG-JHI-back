@@ -3,6 +3,7 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 
 import co.com.supergiros.rastreogiros.entity.PuntoAtencion;
 import co.com.supergiros.rastreogiros.repository.PuntoAtencionRepository;
+import co.com.supergiros.rastreogiros.util.HeadersUtil;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
 
 /**
  * REST controller for managing {@link co.com.supergiros.rastreogiros.domain.PuntoAtencion}.
@@ -58,7 +58,7 @@ public class PuntoAtencionRestController {
                 return ResponseEntity
                     .created(new URI("/api/punto-atencions/" + nuevoPuntoAtencion.getPuntoAtencionId()))
                     .headers(
-                        HeaderUtil.createEntityCreationAlert(
+                        HeadersUtil.createEntityCreationAlert(
                             applicationName,
                             false,
                             ENTITY_NAME,
@@ -106,7 +106,7 @@ public class PuntoAtencionRestController {
         		return ResponseEntity
                         .ok()
                         .headers(
-                            HeaderUtil.createEntityUpdateAlert(
+                            HeadersUtil.createEntityUpdateAlert(
                                 applicationName,
                                 false,
                                 ENTITY_NAME,
@@ -167,7 +167,7 @@ public class PuntoAtencionRestController {
         return ResponseEntity
                             .ok()
                             .headers(
-                                HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, nuevoPuntoAtencion.getPuntoAtencionId().toString())
+                                HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, nuevoPuntoAtencion.getPuntoAtencionId().toString())
                             )
                             .body(nuevoPuntoAtencion);
     }
@@ -291,7 +291,7 @@ public class PuntoAtencionRestController {
         
         return ResponseEntity
                 .noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+                .headers(HeadersUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
                 .build();
         
     }

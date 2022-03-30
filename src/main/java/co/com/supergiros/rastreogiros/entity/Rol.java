@@ -15,6 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -51,8 +52,4 @@ public class Rol implements Serializable {
         usuario.getRoles().add(this);
     }
 
-    @Override
-    public String toString() {
-        return "Rol { 'id':'" + rolId + "', 'nombre':" + nombre + "'}"; // No se incluye usuarios pq causa loop infinito.
-    }
 }

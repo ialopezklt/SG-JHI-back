@@ -2,6 +2,7 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 
 import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
+import co.com.supergiros.rastreogiros.util.HeadersUtil;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import tech.jhipster.web.util.HeaderUtil;
 
 /**
  * REST controller for managing {@link co.com.supergiros.rastreogiros.domain.Usuario}.
@@ -56,7 +56,7 @@ public class UsuarioPrivadoController {
         return ResponseEntity
             .created(new URI("/api/usuarios/" + usuarioNuevo.getUsuarioId()))
             .headers(
-                HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, usuarioNuevo.getUsuarioId().toString())
+                HeadersUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, usuarioNuevo.getUsuarioId().toString())
             )
             .body(usuarioNuevo);
     }
@@ -113,7 +113,7 @@ public class UsuarioPrivadoController {
 	    return ResponseEntity
                 .ok()
                 .headers(
-                    HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, usuarioActualizado.getUsuarioId().toString())
+                    HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, usuarioActualizado.getUsuarioId().toString())
                 )
                 .body(usuarioActualizado);
     }
@@ -203,7 +203,7 @@ public class UsuarioPrivadoController {
             
             return ResponseEntity
                     .ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getUsuarioId().toString()))
+                    .headers(HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getUsuarioId().toString()))
                     .body(result);
         }
 
@@ -265,7 +265,7 @@ public class UsuarioPrivadoController {
         usuarioRepository.deleteById(id);
         return ResponseEntity
                     .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+                    .headers(HeadersUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
                     .build();
     }
 

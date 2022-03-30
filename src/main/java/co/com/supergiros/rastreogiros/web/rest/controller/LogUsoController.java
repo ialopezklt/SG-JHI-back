@@ -35,8 +35,8 @@ import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.LogUsoRepository;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.util.Constantes;
+import co.com.supergiros.rastreogiros.util.HeadersUtil;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
-import tech.jhipster.web.util.HeaderUtil;
 
 /**
  * REST controller for managing {@link co.com.supergiros.rastreogiros.domain.LogUso}.
@@ -80,7 +80,7 @@ public class LogUsoController {
         try {
             return ResponseEntity
                 .created(new URI("/api/log-usos/" + logUsoCreado.getLogUsoId()))
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, logUsoCreado.getLogUsoId().toString()))
+                .headers(HeadersUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, logUsoCreado.getLogUsoId().toString()))
                 .body(logUsoCreado);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -120,7 +120,7 @@ public class LogUsoController {
          return ResponseEntity
                             .ok()
                             .headers(
-                                HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, logUsoActualizado.getLogUsoId().toString())
+                                HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, logUsoActualizado.getLogUsoId().toString())
                             )
                             .body(logUsoActualizado);
     }
@@ -185,7 +185,7 @@ public class LogUsoController {
             }
             return ResponseEntity
                     .ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, existingLogUso.getLogUsoId().toString()))
+                    .headers(HeadersUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, existingLogUso.getLogUsoId().toString()))
                     .body(existingLogUso);
         } 
         throw (new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
@@ -296,7 +296,7 @@ public class LogUsoController {
         
         return ResponseEntity
                     .noContent()
-                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+                    .headers(HeadersUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
                     .build();
     }
 
@@ -316,7 +316,7 @@ public class LogUsoController {
     	
     	return ResponseEntity
                 .noContent()
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, numeroDocumento))
+                .headers(HeadersUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, numeroDocumento))
                 .build();
     	
     }
@@ -337,7 +337,7 @@ public class LogUsoController {
     	
     	return ResponseEntity
                 .noContent()
-                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, numeroDocumento))
+                .headers(HeadersUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, numeroDocumento))
                 .build();
     	
     }
