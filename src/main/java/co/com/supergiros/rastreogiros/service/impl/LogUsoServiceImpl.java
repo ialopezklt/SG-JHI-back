@@ -16,7 +16,6 @@ import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.repository.LogUsoRepository;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
 import co.com.supergiros.rastreogiros.service.LogUsosService;
-import co.com.supergiros.rastreogiros.util.Constantes;
 import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
 
 @Service

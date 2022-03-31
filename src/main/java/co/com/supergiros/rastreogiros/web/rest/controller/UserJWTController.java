@@ -61,7 +61,7 @@ public class UserJWTController {
     	
     	String usernameConvertido = loginVM.getTipoDocumento()+"*"+loginVM.getUsername();
     	String usernameOriginal = loginVM.getUsername();
-    	logUsosService.registraEvento(usernameConvertido, loginVM.getTipoDocumento(), loginVM.getUsername(), "Logueo", "N");
+    	logUsosService.registraEvento(usernameConvertido, loginVM.getTipoDocumento(), loginVM.getUsername(), "Autenticar", "N");
 
     	loginVM.setUsername(usernameConvertido);
         
@@ -73,7 +73,7 @@ public class UserJWTController {
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
         
         // Si llega a la siguiente linea fue porque logro autenticar.
-        logUsosService.registraEvento(usernameConvertido, loginVM.getTipoDocumento(), usernameOriginal, "Autenticar", "N");
+        logUsosService.registraEvento(usernameConvertido, loginVM.getTipoDocumento(), usernameOriginal, "Logueo", "N");
         
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();

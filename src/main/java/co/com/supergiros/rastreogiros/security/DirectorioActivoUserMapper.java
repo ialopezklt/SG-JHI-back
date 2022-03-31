@@ -8,7 +8,6 @@ import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,11 +42,15 @@ public class DirectorioActivoUserMapper extends LdapUserDetailsMapper{
     	List<SimpleGrantedAuthority> rolesAsignados = new ArrayList<SimpleGrantedAuthority>();
 
 		Usuario usuaTemp = usuarioService.findOneWithRolesByUsername(username);
+		if (!usuaTemp.getActivo()) {
+			log.error("El usuario se encuentra inactivo");
+    		throw new BadCredentialsException("El usuario " + username + " esta inactivo.");
+		}
     	if (usuaTemp.getInicioInactivacion() != null 
     			&& usuaTemp.getInicioInactivacion().compareTo(Instant.now())<=0 
     			&& usuaTemp.getFinInactivacion().compareTo(Instant.now()) >=0 ) {
     		log.error("El usuario se encuentra inactivo");
-    		throw new BadCredentialsException("El usuario " + username + " no tiene roles asignados en la aplicacion.");
+    		throw new BadCredentialsException("El usuario " + username + " esta inactivo.");
 		}
     	
     	try {
