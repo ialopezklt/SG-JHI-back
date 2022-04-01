@@ -209,7 +209,7 @@ public class PuntoAtencionRestController {
     }
 
     /**
-     * {@code GET  /punto-atencion/departamentos : trae todos los departamentos de la tabla punto_atencion
+     * {@code GET  /punto-atencion/departamento : trae todos los departamentos de la tabla punto_atencion
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of puntoAtencions in body.
      */
@@ -221,7 +221,7 @@ public class PuntoAtencionRestController {
     }
 
     /**
-     * {@code GET  /punto-atencion/departamentos/{nombreDepartamento} : trae todos los puntos de atencion del departamento
+     * {@code GET  /punto-atencion/departamento/{nombreDepartamento} : trae todos los puntos de atencion del departamento
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of puntoAtencions in body.
      */
@@ -233,7 +233,7 @@ public class PuntoAtencionRestController {
     }
 
     /**
-     * {@code GET  /punto-atencion/departamentos/{nombreDepartamento}/ciudad : trae todos las ciudades del departamento desde PuntoAtencion
+     * {@code GET  /punto-atencion/departamento/{nombreDepartamento}/ciudad : trae todos las ciudades del departamento desde PuntoAtencion
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of puntoAtencions in body.
      */
@@ -246,7 +246,7 @@ public class PuntoAtencionRestController {
     }
 
     /**
-     * {@code GET  /punto-atencion/departamentos/{nombreDepartamento}/ciudad : trae todos los puntos de atencion para la ciudad
+     * {@code GET  /punto-atencion/departamento/{nombreDepartamento}/ciudad : trae todos los puntos de atencion para la ciudad
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of puntoAtencions in body.
      */
