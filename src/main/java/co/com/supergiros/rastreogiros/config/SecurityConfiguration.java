@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -138,6 +139,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/publico/**", "/api/authenticate", "/api/authenticatepub").permitAll()
             .antMatchers("/api/consultagiro/**", "/api/usuario/**").authenticated()
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN_TI)
+            .antMatchers(HttpMethod.GET,"/api/punto-atencion").permitAll()
+            .antMatchers(HttpMethod.GET,"/api/punto-atencion/**").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/health/**").permitAll()
