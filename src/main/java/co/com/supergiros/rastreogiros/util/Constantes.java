@@ -139,7 +139,7 @@ public class Constantes {
     public static final String PARAMETROS_EN_VAULT = "1,2,3,4,5";
 
     // Parametros de acceso público:
-    public static final String PARAMETROS_DE_ACCESO_PUBLICO = "35,36,37,38,40,41";
+    public static final String PARAMETROS_DE_ACCESO_PUBLICO = "35,36,37,38,40,41,47";
 
     // Constantes para control de cambio de clave
     public static String CODIGO_SMS_GENERADO = "";

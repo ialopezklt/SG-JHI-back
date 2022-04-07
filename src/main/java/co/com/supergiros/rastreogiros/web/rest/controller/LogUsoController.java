@@ -331,7 +331,7 @@ public class LogUsoController {
     	evento.setUsuario(numeroDocumento);
     	evento.setNumeroDocumento(numeroDocumento);
     	evento.setFechaHora(LocalDateTime.now());
-    	evento.setOpcion("recuperar");
+    	evento.setOpcion("Recuperar contraseña");
     	
     	logUsoRepository.save(evento);
     	

@@ -96,7 +96,7 @@ public class PublicSecurityController {
     		@RequestParam String numeroIdentificacion) {
     	
     	TipoDocumento tdConvert = TipoDocumento.valueOf(tipoIdentificacion);
-    	System.out.println("tipo de documento a buscar:" + tdConvert);
+    	logger.debug("/usuariorecuperarclave: tipo de documento a buscar:" + tdConvert);
         Usuario usuarioC = usuarioService.findByTipoDocumentoAndNumeroDocumento(tdConvert, numeroIdentificacion);
         UsuarioRecuperarClave usuarioRecuperarClave = new UsuarioRecuperarClave();
         
