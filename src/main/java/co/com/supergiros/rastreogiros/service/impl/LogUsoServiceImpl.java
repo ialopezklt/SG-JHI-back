@@ -43,7 +43,9 @@ public class LogUsoServiceImpl implements LogUsosService {
 		System.out.println("Tipo documento entonces es: " + Constantes.TipoDocumento.valueOf(tipoDocumento));
 		*/
 		
-		TipoDocumento td = (nombreEvento=="Autenticar" || nombreEvento=="Logueo" || nombreEvento=="Registro" ?TipoDocumento.valueOf(tipoDocumento): TipoDocumento.valueOfLabel(tipoDocumento));
+		logger.debug("LogUsoServiceImpl.registraEvento: tipo documento recibido :" + tipoDocumento);
+		
+		TipoDocumento td = (nombreEvento=="Recuperar contraseña" || nombreEvento=="Autenticar" || nombreEvento=="Logueo" || nombreEvento=="Registro" ?TipoDocumento.valueOf(tipoDocumento): TipoDocumento.valueOfLabel(tipoDocumento));
 		
 		// valueOfLabel para registro
 		evento.setTipoDocumento((tipoDocumento==null?null:td));

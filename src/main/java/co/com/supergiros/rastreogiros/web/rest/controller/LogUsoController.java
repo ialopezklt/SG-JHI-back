@@ -326,7 +326,7 @@ public class LogUsoController {
     public ResponseEntity<Void> registroRecuperaClave(@RequestParam(name = "tipodocumento") String tipoDocumento, @RequestParam(name = "numerodocumento") String numeroDocumento) {
     	LogUso evento = new LogUso();
     	Constantes.TipoDocumento tipoDocumento2 = Constantes.TipoDocumento.valueOf(tipoDocumento);
-    	
+    	System.out.println("\n*****************\ntipo documento:"+ tipoDocumento2);
     	evento.setTipoDocumento(tipoDocumento2);
     	evento.setUsuario(numeroDocumento);
     	evento.setNumeroDocumento(numeroDocumento);
