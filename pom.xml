@@ -7,7 +7,7 @@
 
     <groupId>co.com.supergiros.rastreogiros</groupId>
     <artifactId>back-rastreo-giros</artifactId>
-    <version>0.0.1-Beta</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
     <name>Back Rastreo Giros by kalettre.com</name>
     <description>Microservicio BackRastreoGiros</description>

@@ -237,12 +237,13 @@ public class UtilidadesServiceImpl implements UtilidadesService {
         String baseImagenes = parametroService.findById(Constantes.ID_PAR_BASE_IMAGENES).getValor();
 
         mensaje = mensaje.replace("<--CODIGO-->", numeroEmail).replace("<--BASE-IMG-->", baseImagenes);
-        System.out.println("\n************************\n***********************\nLongitud mensaje:" + mensaje.length());
+        logger.debug("\n************************\n***********************\nLongitud mensaje:" + mensaje.length());
         
         StringWriter mensajeCorreo = new StringWriter();
 
         mensajeCorreo.write(mensaje);
-        System.out.println("\n************************\n***********************\nLongitud SB:" + mensajeCorreo.toString().length());
+        logger.debug("\n************************\n***********************\nLongitud SB:" + mensajeCorreo.toString().length());
+        
         try {
 			mensajeCorreo.close();
 		} catch (IOException e) {

@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,19 +62,6 @@ public class PublicSecurityController {
     @PutMapping("/usuariocambiarclave")
     public ResponseEntity<UsuarioRecuperarClave> cambiarClaveUsuario(@RequestBody UsuarioRecuperarClave datoUsuario) {
 
-/*
-        if (
-            Constantes.CODIGO_SMS_GENERADO != datoUsuario.getClaveSMS() || Constantes.CODIGO_EMAIL_GENERADO != datoUsuario.getClaveEmail()
-        ) {
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Las claves de SMS o EMAIL recibidas en /usuariocambiarclave " +
-                "no coinciden con las enviadas al usuario " +
-                datoUsuario.getUsername(),
-                null
-            );
-        }
-*/
         Usuario usuarioC = usuarioService.findByUsername(datoUsuario.getUsername());
 
         if (usuarioC != null) {
@@ -84,6 +72,7 @@ public class PublicSecurityController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario no encontrado", null);
         }
     }
+    // ==================================================================================================================
 
     /**
      * realiza el geneacion de tokens para cambio de clave
@@ -134,6 +123,7 @@ public class PublicSecurityController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuario no encontrado", null);
         }
     }
+    // ==================================================================================================================
 
     /**
      * realiza la consulta de parametros identificados como públicos en la constante
@@ -151,6 +141,7 @@ public class PublicSecurityController {
         List<Parametro> listaParametros = parametroService.findByListaId(listaIdParametros);
         return new ResponseEntity<List<Parametro>>(listaParametros, HttpStatus.OK);
     }
+    // ==================================================================================================================
 
     /**
      * realiza el registro de usuario nuevo, creandolo en la BD
@@ -180,6 +171,7 @@ public class PublicSecurityController {
 
         return new ResponseEntity<UsuarioPublicoDTO>(usuarioPublicoDTOCreado, HttpStatus.OK);
     }
+    // ==================================================================================================================
 
     /**
      * Realiza el envío de mensajes cuando se esta registrando un nuevo usuario
@@ -192,7 +184,9 @@ public class PublicSecurityController {
     @GetMapping("/enviarmensajesvalidacion")
     public ResponseEntity<CodigosMensaje> registrarUsuario(
         @RequestParam(name = "email") String email,
-        @RequestParam(name = "celular") String celular
+        @RequestParam(name = "celular") String celular,
+        @RequestParam(name = "tipoid") String tipoId,
+        @RequestParam(name = "numeroid") String numeroId
     ) throws AddressException {
         if (email.isBlank() || celular.isBlank()) {
             return new ResponseEntity<CodigosMensaje>(new CodigosMensaje(), HttpStatus.BAD_REQUEST);
@@ -215,9 +209,11 @@ public class PublicSecurityController {
         }
 
         CodigosMensaje codigosEnviados = utilidadesService.enviarMensajeRegistro(email, celular);
-
+        
+        
         return new ResponseEntity<CodigosMensaje>(codigosEnviados, HttpStatus.OK);
     }
+    // ==================================================================================================================
 
     @CrossOrigin(origins = "*")
     @PostMapping("/existeusuario")
@@ -254,6 +250,35 @@ public class PublicSecurityController {
         */
 
         return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+    }
+
+    // ==================================================================================================================
+    /**
+     * Obtiene la version del backend
+     * @return "Version"
+     */
+    @CrossOrigin(origins = "*")
+    @GetMapping("/version")
+    public ResponseEntity<String> versionAplicacion() {
+
+        String version="Release_Revision_back_20220426_01";
+
+        return new ResponseEntity<String>(version, HttpStatus.OK);
+    }
+
+    // ==================================================================================================================
+    /**
+     * Deja registro de presion del boton de realizar validacion de los códigos de registro.
+     * @return "Version"
+     */
+    @CrossOrigin(origins = "*")
+    @GetMapping("/registralogautenticar/{tipoId}/{numeroId}")
+    public ResponseEntity<String> registraLogAutenticar(
+    		  @PathVariable(name = "tipoId") String tipoId
+    		, @PathVariable(name = "numeroId") String numeroId) {
+
+    	logUsosService.registraEvento(tipoId+"*"+numeroId, tipoId, numeroId, "Autenticar", "N");
+        return new ResponseEntity<String>("OK", HttpStatus.OK);
     }
 
 }
