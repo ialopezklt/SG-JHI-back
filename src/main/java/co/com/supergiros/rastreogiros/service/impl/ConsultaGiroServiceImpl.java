@@ -34,9 +34,12 @@ public class ConsultaGiroServiceImpl implements ConsultaGiroService {
 
         ParametrosConsultaGiro parametrosConsultaGiro = new ParametrosConsultaGiro();
         parametrosConsultaGiro.setNumeroDocumentoCliente(numeroDocumento);
-        RespuestaConsultaGiro respuesta = null;
+        RespuestaConsultaGiro respuesta = new RespuestaConsultaGiro();
         try {
-            parametrosConsultaGiro.setPin(Long.valueOf(pin));
+            parametrosConsultaGiro.setPin(pin);
+            if (!pin.matches("[0-9]+")) {
+            	throw new RuntimeException("El pin recibo no es numérico : " + pin);
+            }
             parametrosConsultaGiro.setTipoDocumentoCliente(Constantes.TipoDocumentoSIMS.valueOf(tipoDocumento).label);
 
             respuesta = restTemplate.postForObject(urlSims, parametrosConsultaGiro, RespuestaConsultaGiro.class);
@@ -49,21 +52,21 @@ public class ConsultaGiroServiceImpl implements ConsultaGiroService {
             String sospechoso = (Constantes.contadorConsultasPinFallidas>= maxConsultasFallidas ?"S":"N");
         	logUsoService.registraConsultaPin(pin, sospechoso);
             
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
         	respuesta = new RespuestaConsultaGiro();
         	respuesta.setEstado("error");
-        	respuesta.setMensaje("Por favor valida los datos ingresados. Número de PIN no es válido");
-        	respuesta.setPin(0L);
+        	respuesta.setMensaje("Error en la consulta.");
+        	respuesta.setPin("0");
         	Constantes.contadorConsultasPinFallidas += 1;
         	String sospechoso = (Constantes.contadorConsultasPinFallidas>= maxConsultasFallidas ?"S":"N");
         	logUsoService.registraConsultaPin(pin, sospechoso);
 		}
         
         if (respuesta.getEstado().equals("error")) {
-        	log.error("PIN no encontrado. Datos de consulta: ID[" + numeroDocumento + "] Tipo[" + tipoDocumento + "] PIN:[" + pin + "]");
+        	log.error("PIN no encontrado. Datos de consulta: URL["+ urlSims +"] ID[" + numeroDocumento + "] Tipo[" + Constantes.TipoDocumentoSIMS.valueOf(tipoDocumento).label + "] PIN:[" + pin + "]");
         }
         
-        log.error("Resultado consulta pin consulta: ID[" + numeroDocumento + "] Tipo[" + tipoDocumento + "] PIN:[" + pin + "]" 
+        log.error("Resultado consulta pin consulta: ID[" + numeroDocumento + "] Tipo[" + Constantes.TipoDocumentoSIMS.valueOf(tipoDocumento).label + "] PIN:[" + pin + "]" 
         			+ respuesta.getEstado() + " " + respuesta.getMensaje());
         return respuesta;
     }
@@ -73,6 +76,6 @@ public class ConsultaGiroServiceImpl implements ConsultaGiroService {
 
         int tipoDocumentoCliente;
         String numeroDocumentoCliente;
-        Long pin;
+        String pin;
     }
 }

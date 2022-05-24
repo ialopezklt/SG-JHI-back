@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class RespuestaConsultaGiro {
 
-    Long pin;
+    String pin;
     String estado;
     String mensaje;
 }
