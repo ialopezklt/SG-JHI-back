@@ -26,4 +26,5 @@
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
     <include file="config/liquibase/changelog/20220315071308_added_entity_PuntoAtencion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/202205241521_added_index_usuario.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
