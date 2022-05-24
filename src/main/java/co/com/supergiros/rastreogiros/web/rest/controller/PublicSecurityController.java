@@ -261,7 +261,7 @@ public class PublicSecurityController {
     @GetMapping("/version")
     public ResponseEntity<String> versionAplicacion() {
 
-        String version="Release_Revision_back_20220426_01";
+        String version="Release_Revision_back_20220524_01";
 
         return new ResponseEntity<String>(version, HttpStatus.OK);
     }
