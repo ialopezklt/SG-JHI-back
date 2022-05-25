@@ -3,6 +3,7 @@ package co.com.supergiros.rastreogiros.web.rest.controller;
 import co.com.supergiros.rastreogiros.entity.Usuario;
 import co.com.supergiros.rastreogiros.exceptions.UsuarioExisteException;
 import co.com.supergiros.rastreogiros.repository.UsuarioRepository;
+import co.com.supergiros.rastreogiros.util.Constantes.TipoDocumento;
 import co.com.supergiros.rastreogiros.util.HeadersUtil;
 import co.com.supergiros.rastreogiros.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -51,11 +52,13 @@ public class UsuarioPrivadoController {
         if (usuario.getUsuarioId() != null) {
             throw new BadRequestAlertException("A new usuario cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Optional<Usuario> optUsuario = usuarioRepository.findByTipoDocumentoAndNumeroDocumento(usuario.getTipoDocumento(), usuario.getNumeroDocumento());
+        Optional<Usuario> optUsuario = usuarioRepository.findByUsername(usuario.getUsername());
 
         if (optUsuario.isPresent()) {
-        	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya existe usuario con esa identificación", null);
+        	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya existe registro con ese nombre de usuario", null);
         }
+        usuario.setTipoDocumento(TipoDocumento.CC);
+        usuario.setNumeroDocumento(usuario.getUsername());
         
         Usuario usuarioNuevo = usuarioRepository.save(usuario);
 
